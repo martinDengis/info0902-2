@@ -72,3 +72,4 @@ List *pdctBallSearch(PointDct *pd, Point *p, double radius)
     }
     return l;
 }
+ 
