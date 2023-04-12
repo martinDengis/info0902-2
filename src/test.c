@@ -53,11 +53,11 @@ int main(){
     Point *key3 = ptNew(5,5);
 
     int coucou = 3;
-    int *value = (int*)coucou;
+    int *value = &coucou;
     int coucou2 = 4;
-    int *value2 = (int*)coucou2;
+    int *value2 = &coucou2;
     int coucou3 = 5;
-    int *value3 = (int*)coucou3;
+    int *value3 = &coucou3;
 
     bstInsert(bst, key, value);
     bstInsert(bst, key2, value2);
