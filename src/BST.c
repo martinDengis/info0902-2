@@ -36,8 +36,8 @@ struct BST_t
 
 static void bstFreeRec(BNode *n, bool freeKey, bool freeValue);
 static BNode *bnNew(void *key, void *value);
-static double bstAverageNodeDepth(BST *bst);
-stati void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
+double bstAverageNodeDepth(BST *bst);
+void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
 
 /* Function definitions */
 
@@ -83,6 +83,7 @@ void bstFreeRec(BNode *n, bool freeKey, bool freeValue)
     // Bool of freeKey & freeValue pcq on pourrait vouloir free que les values associées à nos clefs (pour changer le type de value par ex : de tripID à taxiID)
     if (n == NULL)
         return;
+    
     bstFreeRec(n->left, freeKey, freeValue);
     bstFreeRec(n->right, freeKey, freeValue);
     if (freeKey)
