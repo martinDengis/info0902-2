@@ -99,7 +99,7 @@ int main(){
     printf("%f\n", p3->y);
     printf("%d\n", test3);  
 
-    bstFree(bst, true, true);
+    bstFree(bst, false, false);
     
     return 0;
 }
