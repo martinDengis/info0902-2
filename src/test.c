@@ -51,7 +51,7 @@ int main(){
     Point *key = ptNew(3,3);
     Point *key2 = ptNew(4,4);
     Point *key3 = ptNew(5,5);
-    Point *key4 = ptNew(2,2);
+    Point *key4 = ptNew(1,1);
 
     int coucou = 3;
     int *value = &coucou;
@@ -59,7 +59,7 @@ int main(){
     int *value2 = &coucou2;
     int coucou3 = 5;
     int *value3 = &coucou3;
-    int coucou4 = 2;
+    int coucou4 = 1;
     int *value4 = &coucou4;
 
     bstInsert(bst, key, value);
@@ -76,29 +76,26 @@ int main(){
     BNode *bn1 = bst->root->right;
     Point *p1 = (Point *)bn1->key;
     int *v1 = (int *)bn1->value;
+    int test1 = *v1;
     printf("%f\n", p1->x);
     printf("%f\n", p1->y);
-    printf("%d\n", *v1);
+    printf("%d\n", test1);
 
     BNode *bn2 = bn1->right;
     Point *p2 = (Point *)bn2->key;
     int *v2 = (int *)bn2->value;
+    int test2 = *v2;
     printf("%f\n", p2->x);
     printf("%f\n", p2->y);
-    printf("%d\n", *v2);
+    printf("%d\n", test2);
 
-    BNode *bn3 = bst->root->left;
-    if (!bn3){
-        printf("coucou");
-        exit(0);
-    }
-    
+    BNode *bn3 = bst->root->left;   
     Point *p3 = (Point *)bn3->key;
     int *v3 = (int *)bn3->value;
+    int test3 = *v3;
     printf("%f\n", p3->x);
     printf("%f\n", p3->y);
-    printf("OK");
-    printf("%d\n", *v3);  
+    printf("%d\n", test3);  
 
     bstFree(bst, true, true);
     
