@@ -83,8 +83,12 @@ void bstFreeRec(BNode *n, bool freeKey, bool freeValue)
     // Bool of freeKey & freeValue pcq on pourrait vouloir free que les values associées à nos clefs (pour changer le type de value par ex : de tripID à taxiID)
     if (n == NULL)
         return;
+    
+    printf("ca va");
     bstFreeRec(n->left, freeKey, freeValue);
+    printf("ca va tjrs");
     bstFreeRec(n->right, freeKey, freeValue);
+    printf("ca va encore");
     if (freeKey)
         free(n->key);
     if (freeValue)
