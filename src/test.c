@@ -92,12 +92,14 @@ int main(){
         printf("coucou");
         exit(0);
     }
+    
     Point *p3 = (Point *)bn3->key;
     int *v3 = (int *)bn3->value;
     printf("%f\n", p3->x);
     printf("%f\n", p3->y);
-    printf("%d\n", *v3);
     printf("OK");
+    printf("%d\n", *v3);
+  
 
     bstFree(bst, true, true);
     
