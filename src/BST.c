@@ -9,6 +9,8 @@
 
 #include "BST.h"
 #include "List.h"
+#include "Point.h"
+
 
 /* Opaque Structure */
 
@@ -38,6 +40,7 @@ static void bstFreeRec(BNode *n, bool freeKey, bool freeValue);
 static BNode *bnNew(void *key, void *value);
 double bstAverageNodeDepth(BST *bst);
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
+void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
 
 /* Function definitions */
 
@@ -199,6 +202,27 @@ void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNo
     }
 }
 
+List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
+    List *kValues =  listNew();
+    if (kValues == NULL){
+        return NULL;
+    }
+    setList(bst, kValues, bst->root, keymin, keymax);
 
-// List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
-// }
+    return kValues;
+}
+
+void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
+    if (n != NULL){
+        setList(bst, list, n->left, keymin, keymax); 
+        if ((ptCompare(n->key, keymax) <= 0) && (ptCompare(n->key, keymin) >= 0)){
+            bool success = listInsertLast(list, n->value);
+            if(!success){
+                printf("Error while inserting value in list");
+                exit(EXIT_FAILURE);
+            }
+        }
+        setList(bst, list, n->right,keymin, keymax);
+    }
+}
+
