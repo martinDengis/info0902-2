@@ -200,5 +200,5 @@ void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNo
 }
 
 
-// List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
-// }
+List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
+}
