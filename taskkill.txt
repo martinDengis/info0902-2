@@ -1,0 +1,4 @@
+taskkill /IM test.exe
+
+puis en fonction du/des PID affiché
+-> taskkill /PID #### /PID #### /F
