@@ -78,26 +78,23 @@ int main(){
     BNode *bn1 = bst->root->right;
     Point *p1 = (Point *)bn1->key;
     int *v1 = (int *)bn1->value;
-    int test1 = *v1;
     printf("%f\n", p1->x);
     printf("%f\n", p1->y);
-    printf("%d\n", test1);
+    printf("%d\n", *v1);
 
     BNode *bn2 = bn1->right;
     Point *p2 = (Point *)bn2->key;
     int *v2 = (int *)bn2->value;
-    int test2 = *v2;
     printf("%f\n", p2->x);
     printf("%f\n", p2->y);
-    printf("%d\n", test2);
+    printf("%d\n", *v2);
 
     BNode *bn3 = bst->root->left;   
     Point *p3 = (Point *)bn3->key;
     int *v3 = (int *)bn3->value;
-    int test3 = *v3;
     printf("%f\n", p3->x);
     printf("%f\n", p3->y);
-    printf("%d\n", test3);  
+    printf("%d\n", *v3);  
 
     bstFree(bst, false, false);
     
