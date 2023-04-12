@@ -11,7 +11,6 @@
 #include "List.h"
 #include "Point.h"
 
-
 /* Opaque Structure */
 
 typedef struct BNode_t BNode;
@@ -202,6 +201,7 @@ void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNo
     }
 }
 
+// Cette fonction nous retourne enft toutes les valeurs dont les clés sont dans une certain tranche de x, avec un tri supplémentaire fait sur les y pour les x égaux. Donc, dans le pdctBallSearch, peut déjà récup toutes les paires de pts dont les x sont compris dans le rayon (et qq uns de ces points auront déjà été éliminés sur base de leur y)
 List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
     List *kValues =  listNew();
     if (kValues == NULL){
@@ -215,6 +215,7 @@ List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
 void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     if (n != NULL){
         setList(bst, list, n->left, keymin, keymax); 
+        
         if ((ptCompare(n->key, keymax) <= 0) && (ptCompare(n->key, keymin) >= 0)){
             bool success = listInsertLast(list, n->value);
             if(!success){
@@ -222,6 +223,7 @@ void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
                 exit(EXIT_FAILURE);
             }
         }
+
         setList(bst, list, n->right,keymin, keymax);
     }
 }
