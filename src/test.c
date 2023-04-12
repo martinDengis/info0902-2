@@ -51,7 +51,7 @@ int main(){
     Point *key = ptNew(3,3);
     Point *key2 = ptNew(4,4);
     Point *key3 = ptNew(5,5);
-    Point *key4 = ptNew(1,1);
+    Point *key4 = ptNew(2,2);
 
     int coucou = 3;
     int *value = &coucou;
@@ -59,7 +59,7 @@ int main(){
     int *value2 = &coucou2;
     int coucou3 = 5;
     int *value3 = &coucou3;
-    int coucou4 = 1;
+    int coucou4 = 2;
     int *value4 = &coucou4;
 
     bstInsert(bst, key, value);
@@ -98,8 +98,7 @@ int main(){
     printf("%f\n", p3->x);
     printf("%f\n", p3->y);
     printf("OK");
-    printf("%d\n", *v3);
-  
+    printf("%d\n", *v3);  
 
     bstFree(bst, true, true);
     
