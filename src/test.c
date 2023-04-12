@@ -33,20 +33,22 @@ struct Point_t
     double y;
 };
 
-int compare_doubles(void* a, void* b);
+int cmpPointX(void *a, void *b);
 double bstAverageNodeDepth(BST *bst);
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
 
-int compare_doubles(void* a, void* b)
+int cmpPointX(void *a, void *b)
 {
-    double* a_ = (double*)a;
-    double* b_ = (double*)b;
-    return (*a_ > *b_) - (*a_ < *b_);
+    Point *p1 = (Point *)a;
+    Point *p2 = (Point *)b;
+    
+    return (p1->x > p2->x) - (p1->x < p2->x);
 }
+
 
 int main(){
 
-    BST *bst = bstNew(compare_doubles);
+    BST *bst = bstNew(cmpPointX);
 
     Point *key = ptNew(3,3);
     Point *key2 = ptNew(4,4);
