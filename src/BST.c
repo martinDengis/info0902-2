@@ -18,7 +18,7 @@ struct BNode_t
 {
     BNode *parent;
     BNode *left;
-    BNode *right;   
+    BNode *right;
     void *key;
     void *value;
 };
@@ -27,8 +27,6 @@ struct BST_t
 {
     BNode *root;
     size_t size;
-
-    // En créeant notre BST, on lui fournira la fonction de comparaison relative à ce BST qui permettra d'insérer les éléments
     int (*compfn)(void *, void *);
 };
 
@@ -64,21 +62,18 @@ BST *bstNew(int comparison_fn_t(void *, void *))
     }
     bst->root = NULL;
     bst->size = 0;
-    //On assigne la fonction de comparaison correspondant au type d'arbre avec lequel on travaille
     bst->compfn = comparison_fn_t;
     return bst;
 }
 
 void bstFree(BST *bst, bool freeKey, bool freeValue)
 {
-    //Permet de libérer récursivement chaque noeud de l'arbre 
     bstFreeRec(bst->root, freeKey, freeValue);
     free(bst);
 }
 
-void bstFreeRec(BNode *n, bool freeKey, bool freeValue) 
+void bstFreeRec(BNode *n, bool freeKey, bool freeValue)
 {
-    // Bool of freeKey & freeValue pcq on pourrait vouloir free que les values associées à nos clefs (pour changer le type de value par ex : de tripID à taxiID)
     if (n == NULL)
         return;
     bstFreeRec(n->left, freeKey, freeValue);
@@ -97,7 +92,6 @@ size_t bstSize(BST *bst)
 
 bool bstInsert(BST *bst, void *key, void *value)
 {
-    // If tree is empty -> Assign root to newly created node
     if (bst->root == NULL)
     {
         bst->root = bnNew(key, value);
@@ -109,21 +103,21 @@ bool bstInsert(BST *bst, void *key, void *value)
         return true;
     }
     BNode *prev = NULL;
-    BNode *n = bst->root;   // n will be the pointer used to go through the tree (updated each time we pass to a new node)
+    BNode *n = bst->root;
     while (n != NULL)
     {
-        prev = n;   // temp var that will allow us to know where we stopped the search
+        prev = n;
         int cmp = bst->compfn(key, n->key);
         if (cmp <= 0)
         {
-            n = n->left;    // Thus, at any point, n can take the NULL value that will exit the loop
+            n = n->left;
         }
         else if (cmp > 0)
         {
             n = n->right;
         }
     }
-    BNode *new = bnNew(key, value); // new node to insert
+    BNode *new = bnNew(key, value);
     if (new == NULL)
     {
         return false;
@@ -163,12 +157,12 @@ void *bstSearch(BST *bst, void *key)
     return NULL;
 }
 
-// Comprendre les fonctions ci dessus avant eet bravo quand vous y arriver, c'est déjà une grosse partie non négligeable
 // A compléter
 
-double bstAverageNodeDepth(BST *bst){
-    
+double bstAverageNodeDepth(BST *bst)
+{
 }
 
-List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
+List *bstRangeSearch(BST *bst, void *keymin, void *keymax)
+{
 }
