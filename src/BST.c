@@ -170,15 +170,5 @@ double bstAverageNodeDepth(BST *bst){
     
 }
 
-int bstTotalNodeDepth(BST *bst, BNode *n, int depth, int totalDepth){
-    // Appel initial à faire sur bstTotalNodeDepth(*bst, bst->root, 0, 0)
-    if (n != NULL){
-        int i = depth + 1;
-        totalDepth += bstTotalNodeDepth(bst, n->left, i, totalDepth);
-        totalDepth += (i-1);
-        totalDepth += bstTotalNodeDepth(bst, n->right, i, totalDepth);
-    }
-}
-
 List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
 }
