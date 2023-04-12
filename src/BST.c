@@ -180,7 +180,7 @@ double bstAverageNodeDepth(BST *bst){
     *totalDepth = 0, *nbNode = 0;
     bstTotalNodeDepth(bst, bst->root, 0, totalDepth, nbNode);
 
-    int avgNodeDepth = *totalDepth / *nbNode;
+    double avgNodeDepth = (double) (*totalDepth) / (*nbNode);
 
     free(totalDepth);
     free(nbNode);

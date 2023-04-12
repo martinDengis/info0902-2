@@ -54,6 +54,7 @@ int main(){
     Point *key2 = ptNew(4,4);
     Point *key3 = ptNew(5,5);
     Point *key4 = ptNew(1,1);
+    Point *key5 = ptNew(6,6);
 
     int coucou = 3;
     int *value = &coucou;
@@ -63,11 +64,14 @@ int main(){
     int *value3 = &coucou3;
     int coucou4 = 1;
     int *value4 = &coucou4;
+    int coucou5 = 6;
+    int *value5 = &coucou5;
 
     bstInsert(bst, key, value);
     bstInsert(bst, key2, value2);
     bstInsert(bst, key3, value3);
     bstInsert(bst, key4, value4);
+    bstInsert(bst, key5, value5);
 
     Point *p = (Point *)bst->root->key;
     int *v = (int *)bst->root->value;
@@ -95,6 +99,16 @@ int main(){
     printf("%f\n", p3->x);
     printf("%f\n", p3->y);
     printf("%d\n", *v3);  
+
+    BNode *bn4 = bn2->right;   
+    Point *p4 = (Point *)bn4->key;
+    int *v4 = (int *)bn4->value;
+    printf("%f\n", p4->x);
+    printf("%f\n", p4->y);
+    printf("%d\n", *v4);  
+
+    double avgNodeDepth = bstAverageNodeDepth(bst);
+    printf("TEST : %f\n", avgNodeDepth);
 
     bstFree(bst, false, false);
     
