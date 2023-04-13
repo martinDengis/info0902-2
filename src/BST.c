@@ -37,6 +37,8 @@ struct BST_t
 
 static void bstFreeRec(BNode *n, bool freeKey, bool freeValue);
 static BNode *bnNew(void *key, void *value);
+
+// ADDED PROTOTYPES
 double bstAverageNodeDepth(BST *bst);
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
 void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
@@ -207,14 +209,14 @@ List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
     if (kValues == NULL){
         return NULL;
     }
-    setList(bst, kValues, bst->root, keymin, keymax);
+    setListBst(bst, kValues, bst->root, keymin, keymax);
 
     return kValues;
 }
 
-void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
+void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     if (n != NULL){
-        setList(bst, list, n->left, keymin, keymax); 
+        setListBst(bst, list, n->left, keymin, keymax); 
         
         if ((ptCompare(n->key, keymax) <= 0) && (ptCompare(n->key, keymin) >= 0)){
             bool success = listInsertLast(list, n->value);
@@ -224,7 +226,7 @@ void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
             }
         }
 
-        setList(bst, list, n->right,keymin, keymax);
+        setListBst(bst, list, n->right,keymin, keymax);
     }
 }
 
