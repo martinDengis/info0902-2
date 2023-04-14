@@ -12,6 +12,12 @@
 #include "Point.h"
 
 // A compléter
+struct Point_t
+{
+    double x;
+    double y;
+};
+
 typedef struct BNode_t BNode;
 struct BNode_t
 {
@@ -101,7 +107,7 @@ size_t bst2dSize(BST2d *bst2d)
 bool bst2dInsert(BST2d *b2d, Point *key, void *value)
 {
     // If tree is empty -> Assign root to newly created node
-    if (bst2d->root == NULL)
+    if (b2d->root == NULL)
     {
         bst2d->root = bnNew(key, value);
         if (bst2d->root == NULL)
@@ -112,11 +118,11 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
         return true;
     }
     BNode *prev = NULL;
-    BNode *n = bst2d->root;   // n will be the pointer used to go through the tree (updated each time we pass to a new node)
+    BNode *n = b2d->root;   // n will be the pointer used to go through the tree (updated each time we pass to a new node)
     while (n != NULL)
     {
         prev = n;   // temp var that will allow us to know where we stopped the search
-        int cmp = bst2d->compfn(key, n->key);
+        int cmp = b2d->compfn(key, n->key);
         if (cmp <= 0)
         {
             n = n->left;    // Thus, at any point, n can take the NULL value that will exit the loop
@@ -132,7 +138,7 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
         return false;
     }
     new->parent = prev;
-    if (bst2d->compfn(key, prev->key) <= 0)
+    if (b2d->compfn(key, prev->key) <= 0)
     {
         prev->left = new;
     }
@@ -140,7 +146,7 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
     {
         prev->right = new;
     }
-    bst2d->size++;
+    b2d->size++;
     return true;
 }
 
@@ -171,26 +177,47 @@ List *bst2dBallSearch(BST2d *bst2d, Point *q, double r){
     if (kValues == NULL){
         return NULL;
     }
+    Point *xBounds = ptNew(q->x - r, q->x + r);
+    Point *yBounds = ptNew(q->y - r, q->y + r);
     double r2 = r*r;
-    setListBst2d(bst2d, kValues, bst2d->root, q, r2);
+    setListBst2d(/* bst2d, kValues, 0,  bst2d->root, q, r2 */);
 
     return kValues;
 }
 
-void setListBst2d(BST2d *bst2d, List *list, BNode *n, Point *q, double r2){
+void bSearchListInit(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
+    // Appel initial sur setListBst2d(bst2d, liste, 0,  bst2d->root, q, r2)
     if (n != NULL){
-        if (ptSqrDistance(n->key, q) <= r2){
-            bool success = listInsertLast(list, n->value);
-            if(!success){
-                printf("Error while inserting value in list");
-                exit(EXIT_FAILURE);
+        listAdmission(list, n, q, r2);
+        if (depth % 2 == 0){
+            // Comparaison sur les X 
+            if (ptGetx(n->key) <= xBounds->x){
+                bSearchListInit(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
+            } else if (ptGetx(n->key) >= xBounds->y){
+                bSearchListInit(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
+            } else {
+                bSearchListInit(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
+                bSearchListInit(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
             }
-        }
 
-        if (/* n dans la liste */){
-            // possible appel sur branche gauche;
-            setListBst2d(bst2d, list, n->left, q, r2); 
+            /* Si n->key->x <= xBounds->x : ignorer branche de gauche
+            Si n->key->x >= xBounds->y : ignorer branche de droite
+            Else, n'ignorer aucune branche */
         }
-        setListBst2d(bst2d, list, n->right, q, r2);
+        else {
+            // Comparaison sur les y
+            // Si n->key->y <= yBounds->x : ignorer branche de gauche
+            // Si n->key->y >= yBounds->y : ignorer branche de droite
+        }
+    }
+}
+
+void listAdmission (List *list, BNode *n, Point *q, double r2){
+    if (ptSqrDistance(n->key, q) <= r2){
+        bool success = listInsertLast(list, n->value);
+        if(!success){
+            printf("Error while inserting value in list");
+            exit(EXIT_FAILURE);
+        }
     }
 }
