@@ -34,7 +34,7 @@ struct BST2d_t
     size_t size;
 
     // En créeant notre BST, on lui fournira la fonction de comparaison relative à ce BST qui permettra d'insérer les éléments
-    int (*compfn)(void *, void *);
+    int (*compfn)(void *, void *, void *);
 };
 
 /* Prototypes of static functions */
@@ -42,10 +42,6 @@ static BNode *bnNew(Point *point, void *value);
 
 // TODO : ajouter les prototypes manquants dans .h
 void bst2dFreeRec(BNode *n, bool freeKey, bool freeValue);
-void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
-void listAdmission (List *list, BNode *n, Point *q, double r2);
-void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
-void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
 
 // !!! Attention : pas le même premier argument que dans BST.c 
 BNode *bnNew(Point *point, void *value)
@@ -62,12 +58,19 @@ BNode *bnNew(Point *point, void *value)
     n->value = value;
     return n;
 }
+void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
+void listAdmission (List *list, BNode *n, Point *q, double r2);
+void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
+void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
+int getDepth(BST2d* b2d, Point* key);
+
+// int getDepth(BST2d* b2d, BNode* node);
 
 /* On passe une fonction de comparaison en argument qui sera associée à un arbre bst2d qu'on créera dans le main. 
 Cette fonction sera donc un attribut de l'arbre. 
 Par après, quand on insérera des clefs dans l'arbre en question, notre fonction d'insertion prendra comme argument l'arbre bst2d (donc aussi la fonction de comparaison associée) et grâce à la fonction associée, insérera la clef au bon endroit */
 
-BST2d *bst2dNew(int comparison_fn_t(void *, void *)){
+BST2d *bst2dNew(int comparison_fn_t(void *, void *, void *)){
     BST2d *bst2d = malloc(sizeof(BST2d));
     if (bst2d == NULL)
     {
@@ -126,7 +129,8 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
     while (n != NULL)
     {
         prev = n;   // temp var that will allow us to know where we stopped the search
-        int cmp = b2d->compfn(key, n->key);
+        int cmp = b2d->compfn(b2d, prev->key, key);
+        printf("Testing - ");
         if (cmp <= 0)
         {
             n = n->left;    // Thus, at any point, n can take the NULL value that will exit the loop
@@ -142,12 +146,15 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
         return false;
     }
     new->parent = prev;
-    if (b2d->compfn(key, prev->key) <= 0)
+    int cmp = b2d->compfn(b2d, prev->key, key);
+    if (cmp <= 0)
     {
+        printf("TestLeft");
         prev->left = new;
     }
     else
     {
+        printf("TestRight");
         prev->right = new;
     }
     b2d->size++;
@@ -159,7 +166,7 @@ void *bst2dSearch(BST2d *b2d, Point *q)
     BNode *n = b2d->root;
     while (n != NULL)
     {
-        int cmp = b2d->compfn(q, n->key);
+        int cmp = b2d->compfn(b2d, n->key, q);
         if (cmp < 0)
         {
             n = n->left;
@@ -190,7 +197,7 @@ List *bst2dBallSearch(BST2d *bst2d, Point *q, double r){
 }
 
 void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    // Appel initial sur bst2dBallSearchRec(bst2d, kValues, 0,  bst2d->root, q, r2, xBounds, yBounds);
+    // Appel initial sur setListBst2d(bst2d, liste, 0,  bst2d->root, q, r2)
     if (n != NULL){
         listAdmission(list, n, q, r2);
         if (depth % 2 == 0){
@@ -244,3 +251,36 @@ void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double 
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     }
 }
+
+int getDepth(BST2d* b2d, Point* key) {
+    BNode *n = b2d->root;
+    int depth = 0;
+    while (n != NULL)
+    {
+        if (n->key == key) {
+            return depth;
+        }
+
+        if (depth % 2 == 0){
+            if (ptGetx(key) <= ptGetx(n->key)){
+                depth++;
+                n = n->left;
+            } else {
+                depth++;
+                n = n->right;
+            }
+        }
+        else {
+            if (ptGety(key) <= ptGety(n->key)) {
+                depth++;
+                n = n->left;
+            } else {
+                depth++;
+                n = n->right;
+            }
+        }
+    }
+    printf("Error : Node not in Tree");
+    exit(EXIT_FAILURE);
+}
+

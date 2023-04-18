@@ -12,6 +12,11 @@
 #include "Point.h"
 
 /* Opaque Structure */
+struct Point_t
+{
+    double x;
+    double y;
+};
 
 typedef struct BNode_t BNode;
 
@@ -42,6 +47,7 @@ static BNode *bnNew(void *key, void *value);
 double bstAverageNodeDepth(BST *bst);
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
 void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
+int cmpPoint(void *p1, void *p2);
 
 /* Function definitions */
 
@@ -230,3 +236,18 @@ void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     }
 }
 
+int cmpPoint(void *p1, void *p2) {
+    Point *point1 = (Point *)p1;
+    Point *point2 = (Point *)p2;
+
+    if (point1->x < point2->x)
+        return -1;
+    else if (point1->x > point2->x)
+        return +1;
+    else if (point1->y < point2->y)
+        return -1;
+    else if (point1->y > point2->y)
+        return +1;
+    else
+        return 0;
+}
