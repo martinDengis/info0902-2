@@ -9,8 +9,14 @@
 
 #include "BST.h"
 #include "List.h"
+#include "Point.h"
 
 /* Opaque Structure */
+struct Point_t
+{
+    double x;
+    double y;
+};
 
 typedef struct BNode_t BNode;
 
@@ -36,8 +42,12 @@ struct BST_t
 
 static void bstFreeRec(BNode *n, bool freeKey, bool freeValue);
 static BNode *bnNew(void *key, void *value);
+
+// ADDED PROTOTYPES
 double bstAverageNodeDepth(BST *bst);
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
+void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
+int cmpPoint(void *p1, void *p2);
 
 /* Function definitions */
 
@@ -199,6 +209,45 @@ void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNo
     }
 }
 
-
+// Cette fonction nous retourne enft toutes les valeurs dont les clés sont dans une certain tranche de x, avec un tri supplémentaire fait sur les y pour les x égaux. Donc, dans le pdctBallSearch, peut déjà récup toutes les paires de pts dont les x sont compris dans le rayon (et qq uns de ces points auront déjà été éliminés sur base de leur y)
 List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
+    List *kValues =  listNew();
+    if (kValues == NULL){
+        return NULL;
+    }
+    setListBst(bst, kValues, bst->root, keymin, keymax);
+
+    return kValues;
+}
+
+void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
+    if (n != NULL){
+        setListBst(bst, list, n->left, keymin, keymax); 
+        
+        if ((ptCompare(n->key, keymax) <= 0) && (ptCompare(n->key, keymin) >= 0)){
+            bool success = listInsertLast(list, n->value);
+            if(!success){
+                printf("Error while inserting value in list");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        setListBst(bst, list, n->right,keymin, keymax);
+    }
+}
+
+int cmpPoint(void *p1, void *p2) {
+    Point *point1 = (Point *)p1;
+    Point *point2 = (Point *)p2;
+
+    if (point1->x < point2->x)
+        return -1;
+    else if (point1->x > point2->x)
+        return +1;
+    else if (point1->y < point2->y)
+        return -1;
+    else if (point1->y > point2->y)
+        return +1;
+    else
+        return 0;
 }

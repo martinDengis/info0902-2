@@ -23,7 +23,7 @@ typedef struct BST2d_t BST2d;
  *                      error
  * ------------------------------------------------------------------------- */
 
-BST2d *bst2dNew(void);
+BST2d *bst2dNew(int comparison_fn_t(void *, void *));
 
 /* ------------------------------------------------------------------------- *
  * Frees the allocated memory of the given BST2d.
