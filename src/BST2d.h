@@ -115,4 +115,7 @@ List *bst2dBallSearch(BST2d *bst2d, Point *q, double r);
 
 double bst2dAverageNodeDepth(BST2d *bst2d);
 
+// ADDED : TO COMMENT
+int cmpPoint(void *p1, void *p2);
+
 #endif // !_BST_H_

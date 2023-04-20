@@ -43,58 +43,6 @@ struct Point_t
     double y;
 };
 
-int cmpPoint(void *p1, void *p2);
-
-int cmpPoint(void *p1, void *p2) {
-    Point *point1 = (Point *)p1;
-    Point *point2 = (Point *)p2;
-
-    if (point1->x < point2->x)
-        return -1;
-    else if (point1->x > point2->x)
-        return +1;
-    else if (point1->y < point2->y)
-        return -1;
-    else if (point1->y > point2->y)
-        return +1;
-    else
-        return 0;
-}
-
-// int cmpBst2d(void *p1, void *p2, void *d);
-
-// int cmpBst2d(void *p1, void *p2, void *d) {
-//     Point *point1 = (Point *)p1;
-//     Point *point2 = (Point *)p2;
-//     int *depth = (int *)d;
-
-//     if ((int) depth % 2 == 0){
-//         if (point1->x < point2->x)
-//             return -1;
-//         else if (point1->x > point2->x)
-//             return +1;
-//         else if (point1->y < point2->y)
-//             return -1;
-//         else if (point1->y > point2->y)
-//             return +1;
-//         else
-//             return 0;
-//     } 
-//     else {
-//         if (point1->y < point2->y)
-//             return -1;
-//         else if (point1->y > point2->y)
-//             return +1;
-//         else if (point1->x < point2->x)
-//             return -1;
-//         else if (point1->x > point2->x)
-//             return +1;
-//         else
-//             return 0;
-//     }
-
-// }
-
 int main(){
 
     BST2d *b2d = bst2dNew(cmpPoint);
@@ -159,16 +107,14 @@ int main(){
         printf("ERROR");
         exit(0);
     }
-    Point *q = ptNew(5,0);
-    testList = bst2dBallSearch(b2d, q, 2);
-    printf("TO DEBUG\n");
-    for (int i = 0; i < (int)testList->size; i++){
-        printf("%d\n", testList[i]);
-    }
-    for (LNode *p = testList->head; p != NULL; p = p->next){
-        
-        printf("%d", *(int*)p->value);
-    }
+    Point *q = ptNew(6,5);
+    testList = bst2dBallSearch(b2d, q, 3);
+    
+    printf("Ball Search w/ centre (6,5) and radius 3 :\n");
+    for (LNode *p = testList->head; p != NULL; p = p->next){ printf("%d - ", *(int*)p->value); }
+
+    double nodeDepth = bst2dAverageNodeDepth(b2d);
+    printf("\n----------\nAverage Node Depth\n%f\n", nodeDepth);
 
     free(testList);
 

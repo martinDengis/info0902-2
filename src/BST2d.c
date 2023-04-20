@@ -46,6 +46,8 @@ void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q,
 void listAdmission (List *list, BNode *n, Point *q, double r2);
 void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
 void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
+void bst2dTotalNodeDepth(BST2d *bst2d, BNode *n, int depth, int *totalDepth, int *nbNode);
+int cmpPoint(void *p1, void *p2);
 
 // !!! Attention : pas le même premier argument que dans BST.c 
 BNode *bnNew(Point *point, void *value)
@@ -243,4 +245,51 @@ void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double 
         bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     }
+}
+
+double bst2dAverageNodeDepth(BST2d *bst2d){
+    int *totalDepth = malloc(sizeof(int));
+    int *nbNode = malloc(sizeof(int));
+    if (totalDepth == NULL || nbNode == NULL) {
+        printf("totalDepth || nbNode : allocation error\n");
+        return 0;
+    }
+
+    *totalDepth = 0, *nbNode = 0;
+    bst2dTotalNodeDepth(bst2d, bst2d->root, 0, totalDepth, nbNode);
+
+    double avgNodeDepth = (double) (*totalDepth) / (*nbNode);
+
+    free(totalDepth);
+    free(nbNode);
+
+    return avgNodeDepth;
+}
+
+void bst2dTotalNodeDepth(BST2d *bst2d, BNode *n, int depth, int *totalDepth, int *nbNode){
+    // Appel initial à faire sur bst2dTotalNodeDepth(*bst2d, bst2d->root, 0, 0, nbNode)
+    if (n != NULL){
+        int i = depth + 1;
+        bst2dTotalNodeDepth(bst2d, n->left, i, totalDepth, nbNode);
+        *totalDepth += (i-1);
+        *nbNode += 1;
+        bst2dTotalNodeDepth(bst2d, n->right, i, totalDepth, nbNode);
+    }
+}
+
+// fonction de comparaison
+int cmpPoint(void *p1, void *p2) {
+    Point *point1 = (Point *)p1;
+    Point *point2 = (Point *)p2;
+
+    if (point1->x < point2->x)
+        return -1;
+    else if (point1->x > point2->x)
+        return +1;
+    else if (point1->y < point2->y)
+        return -1;
+    else if (point1->y > point2->y)
+        return +1;
+    else
+        return 0;
 }
