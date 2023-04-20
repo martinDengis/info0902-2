@@ -130,7 +130,7 @@ int main(){
     printf("x : %f - y : %f - value : %d\n----------\n", p2->x, p2->y, *v2);
 
     // (1,1)
-    BNode *bn3 = b2d->root->left;   
+    BNode *bn3 = b2d->root->left;    
     Point *p3 = (Point *)bn3->key;
     int *v3 = (int *)bn3->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p3->x, p3->y, *v3);
@@ -160,11 +160,15 @@ int main(){
     }
     Point *q = ptNew(1,0);
     testList = bst2dBallSearch(b2d, q, 2);
-    int length = sizeof(testList)/sizeof(testList[0]);
+    //int length = sizeof(testList)/sizeof(testList[0]); ici sizeof() permet de trouver la place que la structure utilise en mémoire, pas la taille de la liste
+    int length = testList->size;
     printf("TO DEBUG");
-    printf("%d", length);
+    printf("%d\n", length);
     for (int i = 0; i < length; i++){
-        printf("%d", i);
+        printf("%d\n", i);
+    }
+    for (LNode *p = testList->head; p != NULL; p = p->next){
+        printf("%d", p->value);
     }
 
     free(testList);

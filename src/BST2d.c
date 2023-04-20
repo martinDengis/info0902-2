@@ -202,7 +202,7 @@ void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q,
     }
 }
 
-void listAdmission (List *list, BNode *n, Point *q, double r2){
+void listAdmission(List *list, BNode *n, Point *q, double r2){
     if (ptSqrDistance(n->key, q) <= r2){
         bool success = listInsertLast(list, n->value);
         if(!success){
@@ -220,7 +220,7 @@ void listAdmission (List *list, BNode *n, Point *q, double r2){
  * Else, n'ignorer aucune branche
  * ------------------------------------------------------------------------- */
 void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    if (ptGetx(n->key) <= xBounds->x) {
+    if (ptGetx(n->key) < xBounds->x) {//if (ptGetx(n->key) <= xBounds->x)
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     } 
     else if (ptGetx(n->key) >= xBounds->y) {
@@ -233,7 +233,7 @@ void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double 
 }
 
 void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    if (ptGety(n->key) <= yBounds->x){
+    if (ptGety(n->key) < yBounds->x){//(ptGety(n->key) <= yBounds->x)
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     } 
     else if (ptGety(n->key) >= yBounds->y){
