@@ -160,7 +160,7 @@ int main(){
     }
     Point *q = ptNew(1,0);
     testList = bst2dBallSearch(b2d, q, 2);
-    int length = sizeof(testList)/sizeof(testList[0]);
+    int length = testList->size;
     printf("TO DEBUG");
     printf("%d", length);
     for (int i = 0; i < length; i++){

@@ -215,15 +215,15 @@ void listAdmission (List *list, BNode *n, Point *q, double r2){
 /* ------------------------------------------------------------------------- *
  * < Comparaison sur les X (resp. Y) >
  *
- * Si n->key->x <= xBounds->x (resp. n->key->y <= yBounds->x): ignorer branche de gauche
- * Si n->key->x >= xBounds->y (resp. n->key->y >= yBounds->y): ignorer branche de droite
+ * Si n->key->x < xBounds->x (resp. n->key->y <= yBounds->x): ignorer branche de gauche
+ * Si n->key->x > xBounds->y (resp. n->key->y >= yBounds->y): ignorer branche de droite
  * Else, n'ignorer aucune branche
  * ------------------------------------------------------------------------- */
 void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    if (ptGetx(n->key) <= xBounds->x) {
+    if (ptGetx(n->key) < xBounds->x) {
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     } 
-    else if (ptGetx(n->key) >= xBounds->y) {
+    else if (ptGetx(n->key) > xBounds->y) {
         bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
     } 
     else {
@@ -233,10 +233,10 @@ void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double 
 }
 
 void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    if (ptGety(n->key) <= yBounds->x){
+    if (ptGety(n->key) < yBounds->x){
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     } 
-    else if (ptGety(n->key) >= yBounds->y){
+    else if (ptGety(n->key) > yBounds->y){
         bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
     } 
     else {
