@@ -223,7 +223,7 @@ void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double 
     if (ptGetx(n->key) < xBounds->x) {
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     } 
-    else if (ptGetx(n->key) > xBounds->y) {
+    else if (ptGetx(n->key) >= xBounds->y) {
         bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
     } 
     else {
@@ -236,7 +236,7 @@ void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double 
     if (ptGety(n->key) < yBounds->x){
         bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
     } 
-    else if (ptGety(n->key) > yBounds->y){
+    else if (ptGety(n->key) >= yBounds->y){
         bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
     } 
     else {

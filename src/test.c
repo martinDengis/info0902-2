@@ -99,10 +99,10 @@ int main(){
 
     BST2d *b2d = bst2dNew(cmpPoint);
 
-    Point *key = ptNew(3,3), *key2 = ptNew(4,4), *key3 = ptNew(5,5), *key4 = ptNew(1,1), *key5 = ptNew(6,6), *key6 = ptNew(6,8), *key7 = ptNew(6,5);
+    Point *key = ptNew(3,3), *key2 = ptNew(4,4), *key3 = ptNew(5,5), *key4 = ptNew(1,1), *key5 = ptNew(6,6), *key6 = ptNew(6,8), *key7 = ptNew(6,5), *key8 = ptNew(3,0);
 
-    int coucou = 3, coucou2 = 4, coucou3 = 5, coucou4 = 1, coucou5 = 6, coucou6 = 8, coucou7 = 65;
-    int *value = &coucou, *value2 = &coucou2, *value3 = &coucou3, *value4 = &coucou4, *value5 = &coucou5, *value6 = &coucou6, *value7 = &coucou7;
+    int coucou = 3, coucou2 = 4, coucou3 = 5, coucou4 = 1, coucou5 = 6, coucou6 = 8, coucou7 = 65, coucou8 = 90;
+    int *value = &coucou, *value2 = &coucou2, *value3 = &coucou3, *value4 = &coucou4, *value5 = &coucou5, *value6 = &coucou6, *value7 = &coucou7, *value8 = &coucou8;
 
     bst2dInsert(b2d, key, value);
     bst2dInsert(b2d, key2, value2);
@@ -111,6 +111,7 @@ int main(){
     bst2dInsert(b2d, key5, value5);
     bst2dInsert(b2d, key6, value6);
     bst2dInsert(b2d, key7, value7);
+    bst2dInsert(b2d, key8, value8);
 
     // (3,3)
     Point *p = (Point *)b2d->root->key;
@@ -158,13 +159,15 @@ int main(){
         printf("ERROR");
         exit(0);
     }
-    Point *q = ptNew(1,0);
+    Point *q = ptNew(5,0);
     testList = bst2dBallSearch(b2d, q, 2);
-    int length = testList->size;
-    printf("TO DEBUG");
-    printf("%d", length);
-    for (int i = 0; i < length; i++){
-        printf("%d", i);
+    printf("TO DEBUG\n");
+    for (int i = 0; i < (int)testList->size; i++){
+        printf("%d\n", testList[i]);
+    }
+    for (LNode *p = testList->head; p != NULL; p = p->next){
+        
+        printf("%d", *(int*)p->value);
     }
 
     free(testList);
