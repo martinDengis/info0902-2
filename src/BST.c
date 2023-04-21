@@ -11,6 +11,10 @@
 #include "List.h"
 #include "Point.h"
 
+// A compléter
+/* ========================================================================= *
+ * PROTOTYPES
+ * ========================================================================= */
 /* Opaque Structure */
 struct Point_t
 {
@@ -18,16 +22,14 @@ struct Point_t
     double y;
 };
 
-typedef struct BNode_t BNode;
-
-struct BNode_t
+typedef struct BNode_t
 {
     BNode *parent;
     BNode *left;
     BNode *right;   
     void *key;
     void *value;
-};
+} BNode;
 
 struct BST_t
 {
@@ -43,13 +45,14 @@ struct BST_t
 static void bstFreeRec(BNode *n, bool freeKey, bool freeValue);
 static BNode *bnNew(void *key, void *value);
 
-// ADDED PROTOTYPES
 double bstAverageNodeDepth(BST *bst);
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
-void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
+void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
 int cmpPoint(void *p1, void *p2);
 
-/* Function definitions */
+/* ========================================================================= *
+ * FONCTIONS
+ * ========================================================================= */
 
 BNode *bnNew(void *key, void *value)
 {
@@ -176,7 +179,6 @@ void *bstSearch(BST *bst, void *key)
     return NULL;
 }
 
-// Comprendre les fonctions ci dessus avant et bravo quand vous y arriver, c'est déjà une grosse partie non négligeable
 // A compléter
 
 double bstAverageNodeDepth(BST *bst){

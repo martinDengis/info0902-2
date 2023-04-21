@@ -12,6 +12,10 @@
 #include "Point.h"
 
 // A compléter
+/* ========================================================================= *
+ * PROTOTYPES
+ * ========================================================================= */
+
 struct Point_t
 {
     double x;
@@ -37,10 +41,7 @@ struct BST2d_t
     int (*compfn)(void *, void *);
 };
 
-/* Prototypes of static functions */
 static BNode *bnNew(Point *point, void *value);
-
-// TODO : ajouter les prototypes manquants dans .h
 void bst2dFreeRec(BNode *n, bool freeKey, bool freeValue);
 void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
 void listAdmission (List *list, BNode *n, Point *q, double r2);
@@ -48,6 +49,10 @@ void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double 
 void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
 void bst2dTotalNodeDepth(BST2d *bst2d, BNode *n, int depth, int *totalDepth, int *nbNode);
 int cmpPoint(void *p1, void *p2);
+
+/* ========================================================================= *
+ * FONCTIONS
+ * ========================================================================= */
 
 // !!! Attention : pas le même premier argument que dans BST.c 
 BNode *bnNew(Point *point, void *value)
