@@ -18,11 +18,11 @@ struct PointDct_t
     BST *bst;
 };
 
-typedef struct lnode_t
-{
-    void *value;
-    struct lnode_t *next;
-} LNode;
+// typedef struct lnode_t
+// {
+//     void *value;
+//     struct lnode_t *next;
+// } LNode;
 
 typedef struct VNode_t 
 {
@@ -37,14 +37,14 @@ int cmpPoint(void *p1, void *p2);
  * FONCTIONS
  * ========================================================================= */
 PointDct *pdctCreate(List *lpoints, List *lvalues) {
-    PointDct *pd = malloc(sizeof(PointDct));
+    PointDct *pd = malloc(sizeof(PointDct*));
     if (pd == NULL)
     {
         printf("pdctCreate: allocation error\n");
         return NULL;
     }
     BST *tree = bstNew(cmpPoint);
-    for (LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next) {
+    for (LNode *p = lpoints->head, *v = lvalues->head; p != NULL, v!= NULL; p = p->next, v = v->next) {
         bstInsert(tree, p->value, v->value);
     }
 
@@ -54,6 +54,7 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
 }
 
 void pdctFree(PointDct *pd) {
+    bstFree(pd->bst, false, false);
     free(pd);
 }
 
@@ -66,7 +67,7 @@ void *pdctExactSearch(PointDct *pd, Point *p) {
 }
 
 /* L'idée sera de faire un premier filtrage des clées à l'aide de la fonction bstRangeSearch et ensuite de ne garder dans la liste filtrée que les positions effectivement dans la boule définie en argument.*/
-List *pdctBallSearch(PointDct *pd, Point *p, double r) {
+List *pdctBallSearch(PointDct *pd, Point *p, double r) {                                                  
     Point *keymin = ptNew(ptGetx(p) - r, ptGety(p) - r);
     Point *keymax = ptNew(ptGetx(p) + r, ptGety(p) + r);
     double r2 = r*r;
@@ -77,9 +78,9 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
 
     bool success = false;
     for (LNode *ln = bstRSearchList->head; ln != NULL; ln = ln->next) {
-        VNode *vn = (VNode *)ln->value;
+        //VNode *vn = (VNode *)ln->value;
         if (ptSqrDistance(vn->point, p) <= r2){
-            success = listInsertLast(pdctBallSearchList, vn->data);
+            success = listInsertLast(pdctBallSearchList, ln->value);
             if(!success){
                 printf("Error while inserting value in list");
                 exit(EXIT_FAILURE);
