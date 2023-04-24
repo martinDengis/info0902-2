@@ -7,6 +7,9 @@
 #include "Point.h"
 #include "BST2d.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 // A compléter
 struct PointDct_t{
     BST2d *bst2d;
@@ -14,7 +17,7 @@ struct PointDct_t{
 
 int cmpPoint(void *p1, void *p2);
 
-PointDct *pdctCreate(List *lpoint, List lvalues){
+PointDct *pdctCreate(List *lpoints, List *lvalues){
     PointDct *pdctbst2d = malloc(sizeof(PointDct));
     if(!pdctbst2d){
         printf("pdctCreate: allocation error");
@@ -32,7 +35,7 @@ PointDct *pdctCreate(List *lpoint, List lvalues){
 
 
 void pdctFree(PointDct *pd){
-    bst2dFree(pd->bst2d);
+    bst2dFree(pd->bst2d, false, false);
     free(pd);
 }
 
@@ -41,7 +44,7 @@ size_t pdctSize(PointDct *pd){
 }
 
 void *pdctExactSearch(PointDct *pd, Point *p){
-    bst2dSearch(pd->bst2d, p);
+    return bst2dSearch(pd->bst2d, p);
 }
 
 List *pdctBallSearch(PointDct *pd, Point *p, double r){
