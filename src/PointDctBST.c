@@ -18,6 +18,15 @@ struct PointDct_t
     BST *bst;
 };
 
+typedef struct BNode_t BNode;
+struct BNode_t{
+    BNode *parent;
+    BNode *left;
+    BNode *right;   
+    void *key;
+    void *value;
+};
+
 // typedef struct lnode_t
 // {
 //     void *value;
@@ -78,9 +87,9 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
 
     bool success = false;
     for (LNode *ln = bstRSearchList->head; ln != NULL; ln = ln->next) {
-        //VNode *vn = (VNode *)ln->value;
-        if (ptSqrDistance(vn->point, p) <= r2){
-            success = listInsertLast(pdctBallSearchList, ln->value);
+        BNode *bn = (BNode *)ln->value;
+        if (ptSqrDistance(bn->key, p) <= r2){
+            success = listInsertLast(pdctBallSearchList, bn->value);
             if(!success){
                 printf("Error while inserting value in list");
                 exit(EXIT_FAILURE);

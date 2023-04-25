@@ -184,16 +184,16 @@ int main(){
 
     
 
-    Point *centre = ptNew(1,1);
+    Point *centre = ptNew(6,8);
 
-    List *pdctBSList = pdctBallSearch(pdBST, centre, 3);
+    List *pdctBSList = pdctBallSearch(pdBST, centre, 1);
 
-    // if(pdctBSList->head){
-    //     printf("y'a des éléments dans la liste!!!!!!!!");
-    // }
-    // for (LNode *ln = pdctBSList->head; ln != NULL; ln = ln->next){
-    //     printf("%d - ", *(int*)ln->value);
-    // }
+    if(pdctBSList->head){
+        printf("y'a des éléments dans la liste!!!!!!!!");
+    }
+    for (LNode *ln = pdctBSList->head; ln != NULL; ln = ln->next){
+        printf("%d - ", *(int*)ln->value);
+    }
 
     //bstFree(bst, false, false);
     pdctFree(pdBST);

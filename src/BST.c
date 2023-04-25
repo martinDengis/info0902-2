@@ -221,13 +221,13 @@ List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
 
     return kValues;
 }
-
+ 
 void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     if (n != NULL){
         setListBst(bst, list, n->left, keymin, keymax); 
         
         if ((ptCompare(n->key, keymax) <= 0) && (ptCompare(n->key, keymin) >= 0)){
-            bool success = listInsertLast(list, n->value);
+            bool success = listInsertLast(list, n);
             if(!success){
                 printf("Error while inserting value in list");
                 exit(EXIT_FAILURE);
