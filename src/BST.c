@@ -22,14 +22,15 @@ struct Point_t
     double y;
 };
 
-typedef struct BNode_t
+typedef struct BNode_t BNode;
+struct BNode_t
 {
     BNode *parent;
     BNode *left;
     BNode *right;   
     void *key;
     void *value;
-} BNode;
+};
 
 struct BST_t
 {

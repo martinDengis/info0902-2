@@ -18,12 +18,6 @@ struct PointDct_t
     BST *bst;
 };
 
-typedef struct lnode_t
-{
-    void *value;
-    struct lnode_t *next;
-} LNode;
-
 typedef struct VNode_t 
 {
     Point *point;
