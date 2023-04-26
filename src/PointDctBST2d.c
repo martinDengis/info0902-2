@@ -25,7 +25,7 @@ PointDct *pdctCreate(List *lpoints, List *lvalues){
     }
 
     BST2d *bst2dtoDct = bst2dNew(cmpPoint);
-    for(LNode *p = lpoints->head, *v = lvalues->head; p != NULL, v != NULL; p = p->next, v = v->next){
+    for(LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next){
         bst2dInsert(bst2dtoDct, p->value, v->value);
     }
 

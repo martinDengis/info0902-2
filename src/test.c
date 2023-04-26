@@ -192,11 +192,13 @@ int main(){
     List *pdctBSList = pdctBallSearch(pdBST, centre, 3);
 
     if(pdctBSList->head){
-        printf("y'a des éléments dans la liste!!!!!!!!");
+        printf("y a des elements dans la liste!!!!!!!!");
+        for (LNode *ln = pdctBSList->head; ln != NULL; ln = ln->next){
+            printf("%d - ", *(int*)ln->value);
+        }
     }
-    for (LNode *ln = pdctBSList->head; ln != NULL; ln = ln->next){
-        printf("%d - ", *(int*)ln->value);
-    }
+    else
+        printf("aie");
 
     //bstFree(bst, false, false);
     pdctFree(pdBST);

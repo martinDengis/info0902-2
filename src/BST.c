@@ -46,7 +46,7 @@ static BNode *bnNew(void *key, void *value);
 // ADDED PROTOTYPES
 double bstAverageNodeDepth(BST *bst);
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode);
-void setList(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
+void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
 int cmpPoint(void *p1, void *p2);
 
 /* Function definitions */
