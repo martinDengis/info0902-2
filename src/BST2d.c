@@ -129,11 +129,11 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
     {
         prev = n;   // temp var that will allow us to know where we stopped the search
         int cmp = b2d->compfn(key, n->key);
-        if (cmp <= 0)
+        if (cmp < 0)
         {
             n = n->left;    // Thus, at any point, n can take the NULL value that will exit the loop
         }
-        else if (cmp > 0)
+        else if (cmp >= 0)
         {
             n = n->right;
         }
@@ -144,7 +144,7 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
         return false;
     }
     new->parent = prev;
-    if (b2d->compfn(key, prev->key) <= 0)
+    if (b2d->compfn(key, prev->key) < 0)
     {
         prev->left = new;
     }
