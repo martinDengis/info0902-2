@@ -223,8 +223,8 @@ List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
 void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     if (n != NULL){
         setListBst(bst, list, n->left, keymin, keymax); 
-        
-        if ((ptCompare(n->key, keymax) <= 0) && (ptCompare(n->key, keymin) >= 0)){
+
+        if ((bst->compfn(n->key, keymax) <= 0) && (bst->compfn(n->key, keymin) >= 0)){
             bool success = listInsertLast(list, n->value);
             if(!success){
                 printf("Error while inserting value in list");

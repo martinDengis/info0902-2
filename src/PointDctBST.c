@@ -42,7 +42,6 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
         bstInsert(tree, p->value, v->value);
     }
 
-    // Checker la struct PointDct_t : je ne sais pas dans quelle mesure c'est toujours un dictionnaire (?). L'arbre EST le dictionnaire en soit...
     pd->bst = tree;
     return pd;
 }
@@ -67,6 +66,7 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
 
     // bstRangeSearch returns a list of LNode, each LNode has an attribute "value" -> This value will be of type VNode defined at the beginning of this file
     List *bstRSearchList = bstRangeSearch(pd->bst, keymin, keymax);
+    printf("Done !");
     List *pdctBallSearchList = listNew();
 
     bool success = false;
