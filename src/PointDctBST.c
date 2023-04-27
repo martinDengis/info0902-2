@@ -39,7 +39,8 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
     }
     BST *tree = bstNew(cmpPoint);
     for (LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next) {
-        bstInsert(tree, p->value, v->value);
+        VNode *vn = (VNode *)v->value;
+        bstInsert(tree, p->value, vn);
     }
 
     pd->bst = tree;

@@ -187,7 +187,9 @@ static List *parseCsv(const char *filename)
 #define REARTH 6371.0
 #define PORTOLONG -8.6291
 #define PORTOLAT 41.1579
-#define M_PI 3.14159
+#ifndef M_PI
+  #define M_PI 3.1415926535897932
+#endif 
 
 /* ------------------------------------------------------------------------- *
  * Convert longitude and latitude into (x,y) coordinates that respect
