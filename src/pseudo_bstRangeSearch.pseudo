@@ -1,0 +1,64 @@
+Q1)
+bstRangeSearch(bst, keymin, keymax){
+    kValues = []
+    setListBst(bst, kValues, bst->root, keymin, keymax)
+
+    return kValues
+}
+
+setListBst(bst, A, node, keymin, keymax){
+    if (node != NULL) // if (node.exists())
+    {
+        setListBst(bst, A, node->left, keymin, keymax) 
+
+        if ((node->key <= keymax) ^ (node->key >= keymin)){
+            listInsertLast(A, node->value)
+        }
+
+        setListBst(bst, A, node->right, keymin, keymax)
+    }
+}
+
+---------------------------------------------------------------
+Q2)
+/* 
+ * Expliquez brièvement la manière dont vous avez implémenté les fonctions suivantes :
+ * pdctCreate et pdctBallSearch dans le cas de l'arbre binaire de recherche simple.
+ * bst2dBallSearch pour l'arbre binaire de rechercher 2d.
+ * pdctCreate dans le cas de l'arbre binaire de recherche 2d
+ */
+Pour BST:
+- pdctCreate prend 2 arg : 1) une liste de points et 2) une liste de valeurs associées
+    -> On commence par initialiser une structure PointDct
+    -> On check si l'allocation mémoire s'est bien passée
+    -> On crée un nouvel arbre via la fonction bstNew qui prend en argument la fonction de comparaison
+    -> On itère à travers les deux listes reçues en arg du pdctCreate en prenant en compte que ces valeurs sont des LNode et pour chaque valeur de la liste lvalues, on cast cette valeur en un type VNode (Value Node) (structure créée pour stocker le point et la valeur associée) et enfin, on insère dans l'arbre la clé et la valeur associée (ici = VNode)
+    -> Finalement, au dictionnaire de type PointDct, on associe l'arbre populé qu'on vient de créer et on retourne le dictionnaire
+- pdctBallSearch prend 3 arg: 1) le dict, 2) un point et 3) un rayon
+    -> Puisque notre fonction de recherche compare les points d'abord sur la coordonnées x, puis sur 
+    -> On commence par définir deux points qui seront respectivement les bornes inférieures et supérieures de la coordonnées  
+
+
+List *pdctBallSearch(PointDct *pd, Point *p, double r) {
+    Point *keymin = ptNew(ptGetx(p) - r, ptGety(p) - r);
+    Point *keymax = ptNew(ptGetx(p) + r, ptGety(p) + r);
+    double r2 = r*r;
+
+    // bstRangeSearch returns a list of LNode, each LNode has an attribute "value" -> This value will be of type VNode defined at the beginning of this file
+    List *bstRSearchList = bstRangeSearch(pd->bst, keymin, keymax);
+    List *pdctBallSearchList = listNew();
+
+    bool success = false;
+    for (LNode *ln = bstRSearchList->head; ln != NULL; ln = ln->next) {
+        VNode *vn = (VNode *)ln->value;
+        if (ptSqrDistance(vn->point, p) <= r2){
+            success = listInsertLast(pdctBallSearchList, vn->data);
+            if(!success){
+                printf("Error while inserting value in list");
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+
+    return pdctBallSearchList;
+}
