@@ -210,6 +210,7 @@ void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNo
 }
 
 // Cette fonction nous retourne enft toutes les valeurs dont les clés sont dans une certain tranche de x, avec un tri supplémentaire fait sur les y pour les x égaux. Donc, dans le pdctBallSearch, peut déjà récup toutes les paires de pts dont les x sont compris dans le rayon (et qq uns de ces points auront déjà été éliminés sur base de leur y)
+
 List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
     List *kValues =  listNew();
     if (kValues == NULL){
@@ -236,7 +237,7 @@ void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     }
 }
 
-int cmpPoint(void *p1, void *p2) {
+int cmpPoint(void *p1, void *p2) {  
     Point *point1 = (Point *)p1;
     Point *point2 = (Point *)p2;
 
