@@ -66,7 +66,6 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
 
     // bstRangeSearch returns a list of LNode, each LNode has an attribute "value" -> This value will be of type VNode defined at the beginning of this file
     List *bstRSearchList = bstRangeSearch(pd->bst, keymin, keymax);
-    printf("Done !");
     List *pdctBallSearchList = listNew();
 
     bool success = false;
