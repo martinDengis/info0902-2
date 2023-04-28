@@ -54,6 +54,9 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
     }
 
     pd->bst = tree;
+
+    double nd = bstAverageNodeDepth(pd->bst);
+    printf("\n     bstAverageNodeDepth : %f\n", nd);
     return pd;
 }
 

@@ -32,8 +32,8 @@ PointDct *pdctCreate(List *lpoints, List *lvalues){
 
     pdctbst2d->bst2d = bst2dtoDct;
 
-    // double nd = bst2dAverageNodeDepth(pdctbst2d->bst2d);
-    // printf("\n-------\nbst2dAverageNodeDepth : %f\n-------\n", nd);
+    double nd = bst2dAverageNodeDepth(pdctbst2d->bst2d);
+    printf("\n     bst2dAverageNodeDepth : %f\n", nd);
     return pdctbst2d;
 }
 
