@@ -52,7 +52,7 @@ int main(){
 
     // BST *bst = bstNew(cmpPoint);
 
-    Point *key = ptNew(3,3), *key2 = ptNew(4,4), *key3 = ptNew(5,5), *key4 = ptNew(1,1), *key5 = ptNew(6,6), *key6 = ptNew(6,8), *key7 = ptNew(6,5), *key8 = ptNew(6,5);
+    Point *key = ptNew(3,7), *key2 = ptNew(6,4), *key3 = ptNew(1,1), *key4 = ptNew(10,3), *key5 = ptNew(7,6), *key6 = ptNew(2,8), *key7 = ptNew(2,8), *key8 = ptNew(5,4);
 
     int coucou = 3, coucou2 = 4, coucou3 = 5, coucou4 = 1, coucou5 = 6, coucou6 = 8, coucou7 = 65, coucou8 = 90;
     int *value = &coucou, *value2 = &coucou2, *value3 = &coucou3, *value4 = &coucou4, *value5 = &coucou5, *value6 = &coucou6, *value7 = &coucou7, *value8 = &coucou8;
@@ -138,49 +138,49 @@ int main(){
     listInsertLast(listValues, value8);
 
     PointDct *pdBST = pdctCreate(listPoints, listValues);
-     // (3,3)
+     // (3,7)
     Point *p = (Point *)pdBST->bst2d->root->key;
     int *v = (int *)pdBST->bst2d->root->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p->x, p->y, *v);
 
-    // (4,4)
+    // (6,4)
     BNode *bn1 = pdBST->bst2d->root->right;
     Point *p1 = (Point *)bn1->key;
     int *v1 = (int *)bn1->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p1->x, p1->y, *v1);
 
-    // (5,5)
-    BNode *bn2 = bn1->right;
+    // (1,1)
+    BNode *bn2 = pdBST->bst2d->root->left;
     Point *p2 = (Point *)bn2->key;
     int *v2 = (int *)bn2->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p2->x, p2->y, *v2);
 
-    // (1,1)
-    BNode *bn3 = pdBST->bst2d->root->left;   
+    // (10,3)
+    BNode *bn3 = bn1->left;   
     Point *p3 = (Point *)bn3->key;
     int *v3 = (int *)bn3->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p3->x, p3->y, *v3);
 
-    // (6,6)
-    BNode *bn4 = bn2->right;   
+    // (7,6)
+    BNode *bn4 = bn1->right;   
     Point *p4 = (Point *)bn4->key;
     int *v4 = (int *)bn4->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p4->x, p4->y, *v4);
 
-    // (6,8)
-    BNode *bn5 = bn4->right;   
+    // (2,8)
+    BNode *bn5 = bn2->right;   
     Point *p5 = (Point *)bn5->key;
     int *v5 = (int *)bn5->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p5->x, p5->y, *v5); 
 
-    // (6,5)
-    BNode *bn6 = bn4->left;   
+    // (2,8)
+    BNode *bn6 = bn5->right;   
     Point *p6 = (Point *)bn6->key;
     int *v6 = (int *)bn6->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p6->x, p6->y, *v6);
     
-    // (6,5)
-    BNode *bn7 = bn6->left;   
+    // (5,4)
+    BNode *bn7 = bn4->left;   
     Point *p7 = (Point *)bn7->key;
     int *v7 = (int *)bn7->value;
     printf("x : %f - y : %f - value : %d\n----------\n", p7->x, p7->y, *v7);  

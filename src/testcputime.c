@@ -12,8 +12,8 @@
 #include "List.h"
 #include "Point.h"
 
-#define N 100000
-#define NSEARCH 10000
+#define N 10000
+#define NSEARCH 1000
 #define RADIUS 0.1
 
 typedef struct Data_t Data;

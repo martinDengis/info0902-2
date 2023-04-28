@@ -12,14 +12,7 @@
 #include "Point.h"
 
 /* Opaque Structure */
-struct Point_t
-{
-    double x;
-    double y;
-};
-
 typedef struct BNode_t BNode;
-
 struct BNode_t
 {
     BNode *parent;
@@ -226,7 +219,7 @@ void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
         setListBst(bst, list, n->left, keymin, keymax); 
 
         if ((bst->compfn(n->key, keymax) <= 0) && (bst->compfn(n->key, keymin) >= 0)){
-            bool success = listInsertLast(list, n->value);
+            bool success = listInsertLast(list, n);
             if(!success){
                 printf("Error while inserting value in list");
                 exit(EXIT_FAILURE);
@@ -241,13 +234,13 @@ int cmpPoint(void *p1, void *p2) {
     Point *point1 = (Point *)p1;
     Point *point2 = (Point *)p2;
 
-    if (point1->x < point2->x)
+    if (ptGetx(point1) < ptGetx(point2))
         return -1;
-    else if (point1->x > point2->x)
+    else if (ptGetx(point1) > ptGetx(point2))
         return +1;
-    else if (point1->y < point2->y)
+    else if (ptGety(point1) < ptGety(point2))
         return -1;
-    else if (point1->y > point2->y)
+    else if (ptGety(point1) > ptGety(point2))
         return +1;
     else
         return 0;

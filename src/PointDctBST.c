@@ -24,6 +24,16 @@ typedef struct VNode_t
     void *data; // Data is the actual value associated to the Point
 } VNode;
 
+typedef struct BNode_t BNode;
+struct BNode_t
+{
+    BNode *parent;
+    BNode *left;
+    BNode *right;   
+    void *key;
+    void *value;
+};
+
 int cmpPoint(void *p1, void *p2);
 
 
@@ -71,9 +81,9 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
 
     bool success = false;
     for (LNode *ln = bstRSearchList->head; ln != NULL; ln = ln->next) {
-        VNode *vn = (VNode *)ln->value;
-        if (ptSqrDistance(vn->point, p) <= r2){
-            success = listInsertLast(pdctBallSearchList, vn->data);
+        BNode *bn = (BNode *)ln->value;
+        if (ptSqrDistance(bn->key, p) <= r2){
+            success = listInsertLast(pdctBallSearchList, bn->value);
             if(!success){
                 printf("Error while inserting value in list");
                 exit(EXIT_FAILURE);

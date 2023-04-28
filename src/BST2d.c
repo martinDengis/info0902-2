@@ -6,58 +6,52 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <math.h> // For sqrt
 
 #include "BST2d.h"
 #include "List.h"
 #include "Point.h"
 
 // A compléter
-struct Point_t
+typedef struct BNode2d_t BNode2d;
+struct BNode2d_t
 {
-    double x;
-    double y;
-};
-
-typedef struct BNode_t BNode;
-struct BNode_t
-{
-    BNode *parent;
-    BNode *left;
-    BNode *right;   
-    void *key;
+    BNode2d *parent;
+    BNode2d *left;
+    BNode2d *right;   
+    Point *key;
     void *value;
 };
 
 struct BST2d_t
 {
-    BNode *root;
+    BNode2d *root;
     size_t size;
-
-    // En créeant notre BST, on lui fournira la fonction de comparaison relative à ce BST qui permettra d'insérer les éléments
-    int (*compfn)(void *, void *);
 };
 
 /* Prototypes of static functions */
-static BNode *bnNew(Point *point, void *value);
+static BNode2d *bnNew2d(Point *point, void *value);
 
 // TODO : ajouter les prototypes manquants dans .h
-void bst2dFreeRec(BNode *n, bool freeKey, bool freeValue);
-void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
-void listAdmission (List *list, BNode *n, Point *q, double r2);
-void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
-void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds);
-void bst2dTotalNodeDepth(BST2d *bst2d, BNode *n, int depth, int *totalDepth, int *nbNode);
-int cmpPoint(void *p1, void *p2);
+void bst2dFreeRec(BNode2d *n, bool freeKey, bool freeValue);
+void bst2dBallSearchRec(List *list, int depth, BNode2d *n, Point *q, double r2, Point *xBounds, Point *yBounds);
+void listAdmission (List *list, BNode2d *n, Point *q, double r2);
+void compareOnX(List *list, BNode2d *n, Point *q, double r, int depth, Point *xBounds, Point *yBounds);
+void compareOnY(List *list, BNode2d *n, Point *q, double r, int depth, Point *xBounds, Point *yBounds);
+void bst2dTotalNodeDepth(BST2d *bst2d, BNode2d *n, int depth, int *totalDepth, int *nbNode);
+int cmpPoint(Point *p1, Point *p2, int depth);
+double euclidianDistance(Point *p1, Point *p2);
 
 // !!! Attention : pas le même premier argument que dans BST.c 
-BNode *bnNew(Point *point, void *value)
+BNode2d *bnNew2d(Point *point, void *value)
 {
-    BNode *n = malloc(sizeof(BNode));
+    BNode2d *n = malloc(sizeof(BNode2d));
     if (n == NULL)
     {
         printf("bnNew: allocation error\n");
         return NULL;
     }
+    n->parent = NULL;
     n->left = NULL;
     n->right = NULL;
     n->key = point;
@@ -65,11 +59,8 @@ BNode *bnNew(Point *point, void *value)
     return n;
 }
 
-/* On passe une fonction de comparaison en argument qui sera associée à un arbre bst2d qu'on créera dans le main. 
-Cette fonction sera donc un attribut de l'arbre. 
-Par après, quand on insérera des clefs dans l'arbre en question, notre fonction d'insertion prendra comme argument l'arbre bst2d (donc aussi la fonction de comparaison associée) et grâce à la fonction associée, insérera la clef au bon endroit */
 
-BST2d *bst2dNew(int comparison_fn_t(void *, void *)){
+BST2d *bst2dNew(){
     BST2d *bst2d = malloc(sizeof(BST2d));
     if (bst2d == NULL)
     {
@@ -78,8 +69,7 @@ BST2d *bst2dNew(int comparison_fn_t(void *, void *)){
     }
     bst2d->root = NULL;
     bst2d->size = 0;
-    //On assigne la fonction de comparaison correspondant au type d'arbre avec lequel on travaille
-    bst2d->compfn = comparison_fn_t;
+
     return bst2d;
 }
 
@@ -90,9 +80,8 @@ void bst2dFree(BST2d *bst2d, bool freeKey, bool freeValue)
     free(bst2d);
 }
 
-void bst2dFreeRec(BNode *n, bool freeKey, bool freeValue) 
+void bst2dFreeRec(BNode2d *n, bool freeKey, bool freeValue) 
 {
-    // Bool of freeKey & freeValue pcq on pourrait vouloir free que les values associées à nos clefs (pour changer le type de value par ex : de tripID à taxiID)
     if (n == NULL)
         return;
     
@@ -115,7 +104,7 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
     // If tree is empty -> Assign root to newly created node
     if (b2d->root == NULL)
     {
-        b2d->root = bnNew(key, value);
+        b2d->root = bnNew2d(key, value);
         if (b2d->root == NULL)
         {
             return false;
@@ -123,28 +112,29 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
         b2d->size++;
         return true;
     }
-    BNode *prev = NULL;
-    BNode *n = b2d->root;   // n will be the pointer used to go through the tree (updated each time we pass to a new node)
+    BNode2d *prev = NULL;
+    BNode2d *n = b2d->root;   // n will be the pointer used to go through the tree (updated each time we pass to a new node)
+    int depth = 0;
     while (n != NULL)
     {
         prev = n;   // temp var that will allow us to know where we stopped the search
-        int cmp = b2d->compfn(key, n->key);
+        int cmp = cmpPoint(key, n->key, depth);
         if (cmp < 0)
         {
             n = n->left;    // Thus, at any point, n can take the NULL value that will exit the loop
+            depth++;
         }
         else if (cmp >= 0)
         {
             n = n->right;
+            depth++;
         }
     }
-    BNode *new = bnNew(key, value); // new node to insert
+    BNode2d *new = bnNew2d(key, value); // new node to insert
     if (new == NULL)
-    {
         return false;
-    }
     new->parent = prev;
-    if (b2d->compfn(key, prev->key) < 0)
+    if (cmpPoint(key, prev->key, depth - 1) < 0)
     {
         prev->left = new;
     }
@@ -158,22 +148,20 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
 
 void *bst2dSearch(BST2d *b2d, Point *q)
 {
-    BNode *n = b2d->root;
+    BNode2d *n = b2d->root;
+    int depth = 0;
     while (n != NULL)
     {
-        int cmp = b2d->compfn(q, n->key);
-        if (cmp < 0)
-        {
-            n = n->left;
-        }
-        else if (cmp > 0)
-        {
-            n = n->right;
-        }
-        else
-        {
+        if (ptCompare(n->key, q) == 0)
             return n->value;
-        }
+
+        int cmp = cmpPoint(q, n->key, depth);
+        if (cmp < 0)
+            n = n->left;
+        else if (cmp >= 0)
+            n = n->right;
+
+        depth++; 
     }
     return NULL;
 }
@@ -183,67 +171,53 @@ List *bst2dBallSearch(BST2d *bst2d, Point *q, double r){
     if (kValues == NULL){
         return NULL;
     }
-    Point *xBounds = ptNew(q->x - r, q->x + r);
-    Point *yBounds = ptNew(q->y - r, q->y + r);
-    double r2 = r*r;
-    bst2dBallSearchRec(bst2d, kValues, 0,  bst2d->root, q, r2, xBounds, yBounds);
+    Point *xBounds = ptNew(ptGetx(q) - r, ptGetx(q) + r);
+    Point *yBounds = ptNew(ptGety(q) - r, ptGety(q) + r);
+    bst2dBallSearchRec(kValues, 0,  bst2d->root, q, r, xBounds, yBounds);
 
     return kValues;
 }
 
-void bst2dBallSearchRec(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    // Appel initial sur bst2dBallSearchRec(bst2d, kValues, 0,  bst2d->root, q, r2, xBounds, yBounds);
+void bst2dBallSearchRec(List *list, int depth, BNode2d *n, Point *q, double r, Point *xBounds, Point *yBounds){
+    // Appel initial sur bst2dBallSearchRec(kValues, 0,  bst2d->root, q, r, xBounds, yBounds);
     if (n != NULL){
-        listAdmission(list, n, q, r2);
-        if (depth % 2 == 0){
-            compareOnX(bst2d, list, depth, n, q, r2, xBounds, yBounds);
-        } 
-        else {
-           compareOnY(bst2d, list, depth, n, q, r2, xBounds, yBounds);
-        }
+        listAdmission(list, n, q, r);
+        if (depth % 2 == 0)
+            compareOnX(list, n, q, r, depth, xBounds, yBounds);
+        else
+            compareOnY(list, n, q, r, depth, xBounds, yBounds);
     }
 }
 
-void listAdmission (List *list, BNode *n, Point *q, double r2){
-    if (ptSqrDistance(n->key, q) <= r2){
+void listAdmission (List *list, BNode2d *n, Point *q, double r){
+    if (euclidianDistance(n->key,q) <= r){
         bool success = listInsertLast(list, n->value);
-        if(!success){
+            if(!success){
             printf("Error while inserting value in list");
             exit(EXIT_FAILURE);
         }
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * < Comparaison sur les X (resp. Y) >
- *
- * Si n->key->x < xBounds->x (resp. n->key->y <= yBounds->x): ignorer branche de gauche
- * Si n->key->x > xBounds->y (resp. n->key->y >= yBounds->y): ignorer branche de droite
- * Else, n'ignorer aucune branche
- * ------------------------------------------------------------------------- */
-void compareOnX(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    if (ptGetx(n->key) < xBounds->x) {
-        bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
-    } 
-    else if (ptGetx(n->key) >= xBounds->y) {
-        bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
-    } 
+void compareOnX(List *list, BNode2d *n, Point *q, double r, int depth, Point *xBounds, Point *yBounds){
+    if (ptGetx(n->key) <= ptGetx(xBounds))
+        bst2dBallSearchRec(list, depth + 1, n->right, q, r, xBounds, yBounds);                
+    else if (ptGetx(n->key) > ptGety(xBounds))
+        bst2dBallSearchRec(list, depth + 1, n->left, q, r, xBounds, yBounds);
     else {
-        bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
-        bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
+        bst2dBallSearchRec(list, depth + 1, n->right, q, r, xBounds, yBounds);                
+        bst2dBallSearchRec(list, depth + 1, n->left, q, r, xBounds, yBounds);
     }
 }
 
-void compareOnY(BST2d *bst2d, List *list, int depth, BNode *n, Point *q, double r2, Point *xBounds, Point *yBounds){
-    if (ptGety(n->key) < yBounds->x){
-        bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
-    } 
-    else if (ptGety(n->key) >= yBounds->y){
-        bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
-    } 
+void compareOnY(List *list, BNode2d *n, Point *q, double r, int depth, Point *xBounds, Point *yBounds) {
+    if (ptGety(n->key) <= ptGetx(yBounds))
+        bst2dBallSearchRec(list, depth + 1, n->right, q, r, xBounds, yBounds);
+    else if (ptGety(n->key) > ptGety(yBounds))
+        bst2dBallSearchRec(list, depth + 1, n->left, q, r, xBounds, yBounds);
     else {
-        bst2dBallSearchRec(bst2d, list, depth++ , n->left, q, r2, xBounds, yBounds);
-        bst2dBallSearchRec(bst2d, list, depth++ , n->right, q, r2, xBounds, yBounds);
+        bst2dBallSearchRec(list, depth + 1, n->right, q, r, xBounds, yBounds);                
+        bst2dBallSearchRec(list, depth + 1, n->left, q, r, xBounds, yBounds);
     }
 }
 
@@ -266,7 +240,7 @@ double bst2dAverageNodeDepth(BST2d *bst2d){
     return avgNodeDepth;
 }
 
-void bst2dTotalNodeDepth(BST2d *bst2d, BNode *n, int depth, int *totalDepth, int *nbNode){
+void bst2dTotalNodeDepth(BST2d *bst2d, BNode2d *n, int depth, int *totalDepth, int *nbNode){
     // Appel initial à faire sur bst2dTotalNodeDepth(*bst2d, bst2d->root, 0, 0, nbNode)
     if (n != NULL){
         int i = depth + 1;
@@ -278,18 +252,27 @@ void bst2dTotalNodeDepth(BST2d *bst2d, BNode *n, int depth, int *totalDepth, int
 }
 
 // fonction de comparaison
-int cmpPoint(void *p1, void *p2) {
-    Point *point1 = (Point *)p1;
-    Point *point2 = (Point *)p2;
+int cmpPoint(Point *p1, Point *p2, int depth) {
+    if(depth % 2 == 0){
+        if (ptGetx(p1) < ptGetx(p2))
+            return -1;
+        else if (ptGetx(p1) > ptGetx(p2))
+            return +1;
+        else 
+            return 0;
+    }
+    else {
+        if (ptGety(p1) < ptGety(p2))
+            return -1;
+        else if (ptGety(p1) > ptGety(p2))
+            return +1;
+        else
+            return 0;
+    }
+}
 
-    if (point1->x < point2->x)
-        return -1;
-    else if (point1->x > point2->x)
-        return +1;
-    else if (point1->y < point2->y)
-        return -1;
-    else if (point1->y > point2->y)
-        return +1;
-    else
-        return 0;
+double euclidianDistance(Point *p1, Point *p2) {
+    double dx = ptGetx(p1) - ptGetx(p2);
+    double dy = ptGety(p1) - ptGety(p2);
+    return sqrt(dx * dx + dy * dy);
 }

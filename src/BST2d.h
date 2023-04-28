@@ -23,7 +23,7 @@ typedef struct BST2d_t BST2d;
  *                      error
  * ------------------------------------------------------------------------- */
 
-BST2d *bst2dNew(int comparison_fn_t(void *, void *));
+BST2d *bst2dNew(void);
 
 /* ------------------------------------------------------------------------- *
  * Frees the allocated memory of the given BST2d.
@@ -114,8 +114,5 @@ List *bst2dBallSearch(BST2d *bst2d, Point *q, double r);
  * ------------------------------------------------------------------------- */
 
 double bst2dAverageNodeDepth(BST2d *bst2d);
-
-// ADDED : TO COMMENT
-int cmpPoint(void *p1, void *p2);
 
 #endif // !_BST_H_
