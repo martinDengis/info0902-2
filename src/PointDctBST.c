@@ -9,20 +9,14 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-// A compléter
+
 /* ========================================================================= *
- * PROTOTYPES
+ * STRUCTURES
  * ========================================================================= */
 struct PointDct_t
 {
     BST *bst;
 };
-
-typedef struct VNode_t 
-{
-    Point *point;
-    void *data; // Data is the actual value associated to the Point
-} VNode;
 
 typedef struct BNode_t BNode;
 struct BNode_t
@@ -34,6 +28,10 @@ struct BNode_t
     void *value;
 };
 
+
+/* ========================================================================= *
+ * PROTOTYPES
+ * ========================================================================= */
 int cmpPoint(void *p1, void *p2);
 
 
@@ -49,14 +47,14 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
     }
     BST *tree = bstNew(cmpPoint);
     for (LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next) {
-        VNode *vn = (VNode *)v->value;
-        bstInsert(tree, p->value, vn);
+        bstInsert(tree, p->value, v->value);
     }
 
     pd->bst = tree;
 
     double nd = bstAverageNodeDepth(pd->bst);
     printf("\n     bstAverageNodeDepth : %f\n", nd);
+
     return pd;
 }
 
@@ -72,13 +70,11 @@ void *pdctExactSearch(PointDct *pd, Point *p) {
     return bstSearch(pd->bst, p);
 }
 
-/* L'idée sera de faire un premier filtrage des clées à l'aide de la fonction bstRangeSearch et ensuite de ne garder dans la liste filtrée que les positions effectivement dans la boule définie en argument.*/
 List *pdctBallSearch(PointDct *pd, Point *p, double r) {
     Point *keymin = ptNew(ptGetx(p) - r, ptGety(p) - r);
     Point *keymax = ptNew(ptGetx(p) + r, ptGety(p) + r);
     double r2 = r*r;
 
-    // bstRangeSearch returns a list of LNode, each LNode has an attribute "value" -> This value will be of type VNode defined at the beginning of this file
     List *bstRSearchList = bstRangeSearch(pd->bst, keymin, keymax);
     List *pdctBallSearchList = listNew();
 

@@ -169,9 +169,6 @@ void *bstSearch(BST *bst, void *key)
     return NULL;
 }
 
-// Comprendre les fonctions ci dessus avant et bravo quand vous y arriver, c'est déjà une grosse partie non négligeable
-// A compléter
-
 double bstAverageNodeDepth(BST *bst){
     int *totalDepth = malloc(sizeof(int));
     int *nbNode = malloc(sizeof(int));
@@ -191,6 +188,17 @@ double bstAverageNodeDepth(BST *bst){
     return avgNodeDepth;
 }
 
+/* ------------------------------------------------------------------------- *
+ * Calculates the total depth of all nodes in the binary search tree
+ *
+ * PARAMETERS
+ * bst          A binary search tree
+ * n            A pointer on a node (BNode type)
+ * depth	    The depth of the bst	
+ * totalDepth   A pointer on the total depth of the bst
+ * nbNode 	    A pointer on the number of nodes in the bst
+ *
+ * ------------------------------------------------------------------------- */
 void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNode){
     // Appel initial à faire sur bstTotalNodeDepth(*bst, bst->root, 0, 0, nbNode)
     if (n != NULL){
@@ -202,8 +210,6 @@ void bstTotalNodeDepth(BST *bst, BNode *n, int depth, int *totalDepth, int *nbNo
     }
 }
 
-// Cette fonction nous retourne enft toutes les valeurs dont les clés sont dans une certain tranche de x, avec un tri supplémentaire fait sur les y pour les x égaux. Donc, dans le pdctBallSearch, peut déjà récup toutes les paires de pts dont les x sont compris dans le rayon (et qq uns de ces points auront déjà été éliminés sur base de leur y)
-
 List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
     List *kValues =  listNew();
     if (kValues == NULL){
@@ -214,6 +220,17 @@ List *bstRangeSearch(BST *bst, void *keymin, void *keymax){
     return kValues;
 }
 
+/* ------------------------------------------------------------------------- *
+ * Checks if a node is in the range and adds it to a list if so
+ *
+ * PARAMETERS
+ * bst          A binary search tree
+ * list	        The list to be filled	
+ * n            A pointer on a node (BNode type)
+ * keymin	    Pointer on the lower bound of the range
+ * keymax  	    Pointer on the upper bound of the range
+ *
+ * ------------------------------------------------------------------------- */
 void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     if (n != NULL){
         setListBst(bst, list, n->left, keymin, keymax); 
@@ -230,6 +247,20 @@ void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
     }
 }
 
+/* ------------------------------------------------------------------------- *
+ * Compares 2 points on x then y
+ *
+ * PARAMETERS
+ * p1        A void pointer on a first point
+ * p2        A void pointer on a second point
+ * 
+ * RETURN
+ *
+ * -1 	     If x coordinate of p1 < x coordinate of p2 or if y coordinate of p1 < y coordinate of p2
+ *  1		 If x coordinate of p1 > x coordinate of p2 or if y coordinate of p1 > y coordinate of p2
+ *  0 	     If equal
+
+ * ------------------------------------------------------------------------- */
 int cmpPoint(void *p1, void *p2) {  
     Point *point1 = (Point *)p1;
     Point *point2 = (Point *)p2;

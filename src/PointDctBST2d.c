@@ -10,13 +10,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// A compléter
+/* ========================================================================= *
+ * STRUCTURES
+ * ========================================================================= */
 struct PointDct_t{
     BST2d *bst2d;
 };
 
-int cmpPoint(void *p1, void *p2);
 
+/* ========================================================================= *
+ * FONCTIONS
+ * ========================================================================= */
 PointDct *pdctCreate(List *lpoints, List *lvalues){
     PointDct *pdctbst2d = malloc(sizeof(PointDct));
     if(!pdctbst2d){
@@ -29,11 +33,11 @@ PointDct *pdctCreate(List *lpoints, List *lvalues){
         bst2dInsert(bst2dtoDct, p->value, v->value);
     }
 
-
     pdctbst2d->bst2d = bst2dtoDct;
 
     double nd = bst2dAverageNodeDepth(pdctbst2d->bst2d);
     printf("\n     bst2dAverageNodeDepth : %f\n", nd);
+
     return pdctbst2d;
 }
 

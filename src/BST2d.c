@@ -12,7 +12,9 @@
 #include "List.h"
 #include "Point.h"
 
-// A compléter
+/* ========================================================================= *
+ * STRUCTURES
+ * ========================================================================= */
 typedef struct BNode2d_t BNode2d;
 struct BNode2d_t
 {
@@ -29,20 +31,25 @@ struct BST2d_t
     size_t size;
 };
 
+/* ========================================================================= *
+ * PROTOTYPES
+ * ========================================================================= */
 /* Prototypes of static functions */
 static BNode2d *bnNew2d(Point *point, void *value);
 
-// TODO : ajouter les prototypes manquants dans .h
+/* Prototypes */
 void bst2dFreeRec(BNode2d *n, bool freeKey, bool freeValue);
 void bst2dBallSearchRec(List *list, int depth, BNode2d *n, Point *q, double r2, Point *xBounds, Point *yBounds);
 void listAdmission (List *list, BNode2d *n, Point *q, double r2);
 void compareOnX(List *list, BNode2d *n, Point *q, double r, int depth, Point *xBounds, Point *yBounds);
 void compareOnY(List *list, BNode2d *n, Point *q, double r, int depth, Point *xBounds, Point *yBounds);
 void bst2dTotalNodeDepth(BST2d *bst2d, BNode2d *n, int depth, int *totalDepth, int *nbNode);
-int cmpPoint(Point *p1, Point *p2, int depth);
+int cmpPoint2d(Point *p1, Point *p2, int depth);
 double euclidianDistance(Point *p1, Point *p2);
 
-// !!! Attention : pas le même premier argument que dans BST.c 
+/* ========================================================================= *
+ * FONCTIONS
+ * ========================================================================= */
 BNode2d *bnNew2d(Point *point, void *value)
 {
     BNode2d *n = malloc(sizeof(BNode2d));
@@ -59,7 +66,6 @@ BNode2d *bnNew2d(Point *point, void *value)
     return n;
 }
 
-
 BST2d *bst2dNew(){
     BST2d *bst2d = malloc(sizeof(BST2d));
     if (bst2d == NULL)
@@ -74,8 +80,7 @@ BST2d *bst2dNew(){
 }
 
 void bst2dFree(BST2d *bst2d, bool freeKey, bool freeValue)
-{
-    //Permet de libérer récursivement chaque noeud de l'arbre 
+{ 
     bst2dFreeRec(bst2d->root, freeKey, freeValue);
     free(bst2d);
 }
@@ -112,13 +117,15 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
         b2d->size++;
         return true;
     }
+
     BNode2d *prev = NULL;
     BNode2d *n = b2d->root;   // n will be the pointer used to go through the tree (updated each time we pass to a new node)
     int depth = 0;
+    
     while (n != NULL)
     {
         prev = n;   // temp var that will allow us to know where we stopped the search
-        int cmp = cmpPoint(key, n->key, depth);
+        int cmp = cmpPoint2d(key, n->key, depth);
         if (cmp < 0)
         {
             n = n->left;    // Thus, at any point, n can take the NULL value that will exit the loop
@@ -130,18 +137,17 @@ bool bst2dInsert(BST2d *b2d, Point *key, void *value)
             depth++;
         }
     }
+
     BNode2d *new = bnNew2d(key, value); // new node to insert
     if (new == NULL)
         return false;
+
     new->parent = prev;
-    if (cmpPoint(key, prev->key, depth - 1) < 0)
-    {
+    if (cmpPoint2d(key, prev->key, depth - 1) < 0)    // If cmpPoint2d < 0 : insert on the left, else : insert on the right
         prev->left = new;
-    }
     else
-    {
         prev->right = new;
-    }
+
     b2d->size++;
     return true;
 }
@@ -150,12 +156,13 @@ void *bst2dSearch(BST2d *b2d, Point *q)
 {
     BNode2d *n = b2d->root;
     int depth = 0;
+
     while (n != NULL)
     {
-        if (ptCompare(n->key, q) == 0)
+        if (ptCompare(n->key, q) == 0)  // If match between n->key and point, return the value associated to n
             return n->value;
 
-        int cmp = cmpPoint(q, n->key, depth);
+        int cmp = cmpPoint2d(q, n->key, depth);   // If cmpPoint2d < 0 : go to left child, else : right child
         if (cmp < 0)
             n = n->left;
         else if (cmp >= 0)
@@ -163,6 +170,7 @@ void *bst2dSearch(BST2d *b2d, Point *q)
 
         depth++; 
     }
+
     return NULL;
 }
 
@@ -251,8 +259,7 @@ void bst2dTotalNodeDepth(BST2d *bst2d, BNode2d *n, int depth, int *totalDepth, i
     }
 }
 
-// fonction de comparaison
-int cmpPoint(Point *p1, Point *p2, int depth) {
+int cmpPoint2d(Point *p1, Point *p2, int depth) {
     if(depth % 2 == 0){
         if (ptGetx(p1) < ptGetx(p2))
             return -1;
