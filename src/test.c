@@ -106,12 +106,23 @@ int main(){
     if (testList == NULL){
         printf("ERROR");
         exit(0);
+    
+
+    Point *centre = ptNew(5.56789,4.1345);
+
+    List *pdctBSList = pdctBallSearch(pdBST, centre, 3);
+
+    if(pdctBSList->head){
+        printf("y'a des éléments dans la liste!!!!!!!!");
+    }
+    for (LNode *ln = pdctBSList->head; ln != NULL; ln = ln->next){
+        printf("%d - ", *(int*)ln->value);
     }
     Point *q = ptNew(6,5);
     testList = bst2dBallSearch(b2d, q, 3);
     
     printf("Ball Search w/ centre (6,5) and radius 3 :\n");
-    for (LNode *p = testList->head; p != NULL; p = p->next){ printf("%d - ", *(int*)p->value); }
+    for (LNode *p = testList->head; p != NULL; p = p->next){ printf("%d - ", *(int*)p->value); 
 
     double nodeDepth = bst2dAverageNodeDepth(b2d);
     printf("\n----------\nAverage Node Depth\n%f\n", nodeDepth);

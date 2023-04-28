@@ -12,6 +12,10 @@
 #include "List.h"
 #include "Point.h"
 
+#ifndef M_PI
+  #define M_PI 3.1415926535897932
+#endif 
+
 typedef struct Trip_t Trip;
 
 struct Trip_t

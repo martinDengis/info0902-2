@@ -1,0 +1,57 @@
+Commentaire fonctions:
+
+/* ------------------------------------------------------------------------- *
+ * Calculates the total depth of all nodes in the binary search tree
+ *
+ * PARAMETERS
+ * bst          A binary search tree
+ * n            A pointer on a node (BNode type)
+ * depth	    The depth of the bst	
+ * totalDepth   A pointer on the total depth of the bst
+ * nbNode 	    A pointer on the number of nodes in the bst
+ *
+ * ------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------------------- *
+ * Checks if a node is in the range and adds it to a list if so
+ *
+ * PARAMETERS
+ * bst          A binary search tree
+ * n            A pointer on a node (BNode type)
+ * list	    The list to be filled	
+ * keymin	    Pointer on the lower bound of the range
+ * keymax  	    Pointer on the upper bound of the range
+ *
+ * ------------------------------------------------------------------------- */
+
+
+/* ------------------------------------------------------------------------- *
+ * Calculates the total depth of all nodes in the binary search tree
+ *
+ * PARAMETERS
+ * p1            A void pointer on a first point
+ * p2            A void pointer on a second point
+ * 
+ * RETURN
+ *
+ * -1 	     If x coordinate of p1 < x coordinate of p2 or if y coordinate of p1 < y coordinate of p2
+ *  1		     If x coordinate of p1 > x coordinate of p2 or if y coordinate of p1 > y coordinate of p2
+ *  0 	     If equal
+
+ * ------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------------------- *
+ * Calculates the total depth of all nodes in the binary search tree
+ *
+ * PARAMETERS
+ * p1            A void pointer on a first point
+ * p2            A void pointer on a second point
+ * 
+ * RETURN
+ *
+ * -1 	     If x coordinate of p1 < x coordinate of p2 or if y coordinate of p1 < y coordinate of p2
+ *  1		     If x coordinate of p1 > x coordinate of p2 or if y coordinate of p1 > y coordinate of p2
+ *  0 	     If equal
+
+ * ------------------------------------------------------------------------- */	
+
