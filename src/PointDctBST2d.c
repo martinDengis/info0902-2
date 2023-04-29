@@ -13,13 +13,14 @@
 /* ========================================================================= *
  * STRUCTURES
  * ========================================================================= */
-struct PointDct_t{
+struct PointDct_t 
+{
     BST2d *bst2d;
 };
 
 
 /* ========================================================================= *
- * FONCTIONS
+ * FUNCTIONS
  * ========================================================================= */
 PointDct *pdctCreate(List *lpoints, List *lvalues){
     PointDct *pdctbst2d = malloc(sizeof(PointDct));
@@ -29,18 +30,20 @@ PointDct *pdctCreate(List *lpoints, List *lvalues){
     }
 
     BST2d *bst2dtoDct = bst2dNew();
+    // Iterate through both arg lists and populate the tree structure
     for(LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next){
         bst2dInsert(bst2dtoDct, p->value, v->value);
     }
 
+    // Assign tree to dictionary
     pdctbst2d->bst2d = bst2dtoDct;
 
+    // Printing avg node depth for question 4
     double nd = bst2dAverageNodeDepth(pdctbst2d->bst2d);
     printf("\n     bst2dAverageNodeDepth : %f\n", nd);
 
     return pdctbst2d;
 }
-
 
 void pdctFree(PointDct *pd){
     bst2dFree(pd->bst2d, false, false);

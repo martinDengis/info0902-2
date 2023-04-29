@@ -32,11 +32,27 @@ struct BNode_t
 /* ========================================================================= *
  * PROTOTYPES
  * ========================================================================= */
+
+/* ------------------------------------------------------------------------- *
+ * Compares 2 points on x then y
+ *
+ * PARAMETERS
+ * p1        A void pointer (here : on a first point)
+ * p2        A void pointer (here : on a second point)
+ * 
+ * RETURN
+ *
+ * -1 	     If x coordinate of p1 < x coordinate of p2 or if y coordinate of p1 < y coordinate of p2
+ *  1		 If x coordinate of p1 > x coordinate of p2 or if y coordinate of p1 > y coordinate of p2
+ *  0 	     If equal
+ *
+ * ------------------------------------------------------------------------- */
+
 int cmpPoint(void *p1, void *p2);
 
 
 /* ========================================================================= *
- * FONCTIONS
+ * FUNCTIONS
  * ========================================================================= */
 PointDct *pdctCreate(List *lpoints, List *lvalues) {
     PointDct *pd = malloc(sizeof(PointDct));
@@ -45,13 +61,17 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
         printf("pdctCreate: allocation error\n");
         return NULL;
     }
+    
     BST *tree = bstNew(cmpPoint);
+    // Iterate through both arg lists and populate the tree structure
     for (LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next) {
         bstInsert(tree, p->value, v->value);
     }
 
+    // Assign tree to dictionary
     pd->bst = tree;
 
+    // Printing avg node depth for question 4
     double nd = bstAverageNodeDepth(pd->bst);
     printf("\n     bstAverageNodeDepth : %f\n", nd);
 
@@ -75,6 +95,7 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
     Point *keymax = ptNew(ptGetx(p) + r, ptGety(p) + r);
     double r2 = r*r;
 
+    // bstRangeSearch returns list as : if n->key is in range [keymin : keymax] -> add node to list
     List *bstRSearchList = bstRangeSearch(pd->bst, keymin, keymax);
     List *pdctBallSearchList = listNew();
 
