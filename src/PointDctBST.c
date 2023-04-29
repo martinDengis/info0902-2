@@ -65,11 +65,6 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
     bool success = false;
     for (LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next) {
         NodeValue *nodeValue = malloc(sizeof(NodeValue));
-        if (nodeValue == NULL)
-        {
-            printf("nodeValue: allocation error\n");
-            return NULL;
-        }
         nodeValue->key = p->value;
         nodeValue->value = v->value;
 
@@ -91,6 +86,7 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
 }
 
 void pdctFree(PointDct *pd) {
+    bstFree(pd->bst, false, false);
     free(pd);
 }
 
@@ -127,8 +123,8 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
         }
     }
 
-    free(keymin);
-    free(keymax);
+    ptFree(keymin);
+    ptFree(keymax);
     listFree(bstRSearchList, false);
 
     return pdctBallSearchList;

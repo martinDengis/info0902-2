@@ -314,6 +314,9 @@ List *bst2dBallSearch(BST2d *bst2d, Point *q, double r){
     Point *yBounds = ptNew(ptGety(q) - r, ptGety(q) + r);
     bst2dBallSearchRec(kValues, 0,  bst2d->root, q, r, xBounds, yBounds);
 
+    ptFree(xBounds);
+    ptFree(yBounds);
+
     return kValues;
 }
 
