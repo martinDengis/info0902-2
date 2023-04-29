@@ -2,13 +2,13 @@
  * PointDct definition (with BST)
  * ========================================================================= */
 
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "PointDct.h"
 #include "List.h"
 #include "Point.h"
 #include "BST.h"
+
+#include <stdlib.h>
+#include <stdio.h>
 
 /* ========================================================================= *
  * STRUCTURES
@@ -18,10 +18,13 @@ struct PointDct_t
     BST *bst;
 };
 
-typedef struct NodeValue_t NodeValue;
-struct NodeValue_t
-{   
-    Point *key;
+typedef struct BNode_t BNode;
+struct BNode_t
+{
+    BNode *parent;
+    BNode *left;
+    BNode *right;   
+    void *key;
     void *value;
 };
 
@@ -60,24 +63,9 @@ PointDct *pdctCreate(List *lpoints, List *lvalues) {
     }
     
     BST *tree = bstNew(cmpPoint);
-
     // Iterate through both arg lists and populate the tree structure
-    bool success = false;
     for (LNode *p = lpoints->head, *v = lvalues->head; p != NULL; p = p->next, v = v->next) {
-        NodeValue *nodeValue = malloc(sizeof(NodeValue));
-        if (nodeValue == NULL)
-        {
-            printf("nodeValue: allocation error\n");
-            return NULL;
-        }
-        nodeValue->key = p->value;
-        nodeValue->value = v->value;
-
-        success = bstInsert(tree, p->value, nodeValue);
-        if(!success){
-            printf("Error while inserting value in tree");
-            exit(EXIT_FAILURE);
-        }
+        bstInsert(tree, p->value, v->value);
     }
 
     // Assign tree to dictionary
@@ -99,11 +87,7 @@ size_t pdctSize(PointDct *pd) {
 }
 
 void *pdctExactSearch(PointDct *pd, Point *p) {
-    NodeValue *nodeValue = bstSearch(pd->bst, p);
-    if (nodeValue == NULL)
-        return NULL;
-
-    return nodeValue->value;
+    return bstSearch(pd->bst, p);
 }
 
 List *pdctBallSearch(PointDct *pd, Point *p, double r) {
@@ -117,9 +101,9 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
 
     bool success = false;
     for (LNode *ln = bstRSearchList->head; ln != NULL; ln = ln->next) {
-        NodeValue *nv = ln->value;
-        if (ptSqrDistance(nv->key, p) <= r2){
-            success = listInsertLast(pdctBallSearchList, nv->value);
+        BNode *bn = (BNode *)ln->value;
+        if (ptSqrDistance(bn->key, p) <= r2){
+            success = listInsertLast(pdctBallSearchList, bn->value);
             if(!success){
                 printf("Error while inserting value in list");
                 exit(EXIT_FAILURE);
@@ -127,25 +111,5 @@ List *pdctBallSearch(PointDct *pd, Point *p, double r) {
         }
     }
 
-    free(keymin);
-    free(keymax);
-    listFree(bstRSearchList, false);
-
     return pdctBallSearchList;
-}
-
-int cmpPoint(void *p1, void *p2) {  
-    Point *point1 = (Point *)p1;
-    Point *point2 = (Point *)p2;
-
-    if (ptGetx(point1) < ptGetx(point2))
-        return -1;
-    else if (ptGetx(point1) > ptGetx(point2))
-        return +1;
-    else if (ptGety(point1) < ptGety(point2))
-        return -1;
-    else if (ptGety(point1) > ptGety(point2))
-        return +1;
-    else
-        return 0;
 }

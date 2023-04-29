@@ -1,15 +1,12 @@
 OFILES_testlist = testcputime.o PointDctList.o Point.o List.o
 OFILES_testbst = testcputime.o PointDctBST.o Point.o List.o BST.o
 OFILES_testbst2d = testcputime.o PointDctBST2d.o Point.o List.o BST2d.o
-OFILES_taxiList = testtaxi.o PointDctList.o Point.o List.o 
-OFILES_taxiBST = testtaxi.o PointDctBST.o Point.o List.o BST.o
-OFILES_taxiBST2d = testtaxi.o PointDctBST2d.o Point.o List.o BST2d.o
+OFILES_taxi = testtaxi.o PointDctList.o Point.o List.o
 
 TARGET_testlist = testlist
 TARGET_testbst = testbst
 TARGET_testbst2d = testbst2d
-TARGET_taxiList = testtaxiList
-TARGET_taxiBST = testtaxi
+TARGET_taxi = testtaxi
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Wmissing-prototypes --pedantic -std=c99
@@ -18,14 +15,13 @@ CFLAGS = -Wall -Wextra -Wmissing-prototypes --pedantic -std=c99
 
 LDFLAGS = -lm
 
-all: $(TARGET_testlist) $(TARGET_testbst) $(TARGET_testbst2d) $(TARGET_testtaxi)
+all: $(TARGET_testlist) $(TARGET_testbst) $(TARGET_testbst2d)
 clean:
 	rm -f $(OFILES_testlist) $(OFILES_testbst) $(OFILES_testbst2d) $(OFILES_taxi)
 run: $(TARGET_testlist) $(TARGET_testbst) $(TARGET_testbst2d)
 	./$(TARGET_testlist) 1000000 10000 0.01
 	./$(TARGET_testbst) 1000000 10000 0.01
 	./$(TARGET_testbst2d) 1000000 10000 0.01
-	./$(TARGET_testtaxi) -8.6291 41.1579 0.5
 
 $(TARGET_testlist): $(OFILES_testlist)
 	$(CC) -o $(TARGET_testlist) $(OFILES_testlist) $(LDFLAGS)

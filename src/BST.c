@@ -7,9 +7,9 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-#include "BST.h"
-#include "List.h"
 #include "Point.h"
+#include "List.h"
+#include "BST.h"
 
 /* ========================================================================= *
  * STRUCTURES
@@ -42,8 +42,6 @@ static void bstFreeRec(BNode *n, bool freeKey, bool freeValue);
 static BNode *bnNew(void *key, void *value);
 
 /* Prototypes added functions */
-double bstAverageNodeDepth(BST *bst);
-
 /* ------------------------------------------------------------------------- *
  * Calculates the total depth of all nodes in the binary search tree
  *
@@ -85,8 +83,6 @@ void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax);
  *  0 	     If equal
  *
  * ------------------------------------------------------------------------- */
-
-int cmpPoint(void *p1, void *p2);
 
 
 /* ========================================================================= *
@@ -261,8 +257,8 @@ void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
         setListBst(bst, list, n->left, keymin, keymax); 
 
         // if n->key is in range [keymin : keymax] : add node to list
-        if ((bst->compfn(n->key, keymax) <= 0) && (bst->compfn(n->key, keymin) >= 0)){
-            bool success = listInsertLast(list, n);
+        if ((bst->compfn(n->key, keymin) >= 0) && (bst->compfn(n->key, keymax) <= 0)){
+            bool success = listInsertLast(list, n->value);
             if(!success){
                 printf("Error while inserting value in list");
                 exit(EXIT_FAILURE);
@@ -271,20 +267,4 @@ void setListBst(BST *bst, List *list, BNode *n, void *keymin, void *keymax){
 
         setListBst(bst, list, n->right,keymin, keymax);
     }
-}
-
-int cmpPoint(void *p1, void *p2) {  
-    Point *point1 = (Point *)p1;
-    Point *point2 = (Point *)p2;
-
-    if (ptGetx(point1) < ptGetx(point2))
-        return -1;
-    else if (ptGetx(point1) > ptGetx(point2))
-        return +1;
-    else if (ptGety(point1) < ptGety(point2))
-        return -1;
-    else if (ptGety(point1) > ptGety(point2))
-        return +1;
-    else
-        return 0;
 }
